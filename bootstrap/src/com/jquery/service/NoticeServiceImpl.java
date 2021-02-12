@@ -14,6 +14,8 @@ import com.jquery.dao.NoticeAttachDAO;
 import com.jquery.dao.NoticeAttachDAOImpl;
 import com.jquery.dao.NoticeDAO;
 import com.jquery.dao.NoticeDAOImpl;
+import com.jquery.dto.AttachVO;
+import com.jquery.dto.BoardVO;
 import com.jquery.dto.NoticeAttachVO;
 import com.jquery.dto.NoticeVO;
 import com.jquery.mybatis.OracleIBatisSqlSessionFactory;
@@ -80,6 +82,44 @@ public class NoticeServiceImpl implements NoticeService {
 	}
 	
 	@Override
+	public NoticeVO getNoticeForModify(int nno) throws SQLException {
+		SqlSession session = sqlSessionFactory.openSession(false);
+		try {
+			NoticeVO notice = noticeDAO.selectNoticeByNno(session, nno);
+			List<NoticeAttachVO> attachList = noticeAttachDAO.selectNoticeAttachesByNno(session, nno);
+			notice.setNoticeAttachList(attachList);
+			session.commit();
+			return notice;
+		} catch (SQLException e) {
+			session.rollback();
+			e.printStackTrace();
+			throw e;
+		} finally {
+			session.close();
+		}
+	}
+
+	@Override
+	public NoticeVO getNotice(int nno) throws SQLException {
+		SqlSession session = sqlSessionFactory.openSession(false);
+		try {
+			NoticeVO notice = noticeDAO.selectNoticeByNno(session, nno);
+			List<NoticeAttachVO> attachList = noticeAttachDAO.selectNoticeAttachesByNno(session, nno);
+			notice.setNoticeAttachList(attachList);
+			
+			noticeDAO.increaseViewCnt(session, nno);
+			session.commit();
+			return notice;
+		} catch (SQLException e) {
+			session.rollback();
+			e.printStackTrace();
+			throw e;
+		} finally {
+			session.close();
+		}
+	}
+	
+	@Override
 	public void regist(NoticeVO notice) throws SQLException {
 		SqlSession session = sqlSessionFactory.openSession(false);
 		try {
@@ -104,4 +144,70 @@ public class NoticeServiceImpl implements NoticeService {
 		}
 	}
 
+	@Override
+	public void modify(NoticeVO notice) throws SQLException {
+		SqlSession session = sqlSessionFactory.openSession(false);
+		try {
+			noticeDAO.updateNotice(session, notice);
+
+			for (NoticeAttachVO attach : notice.getNoticeAttachList()) {
+				attach.setNno(notice.getNno());
+				attach.setAttacher(notice.getWriter());
+				noticeAttachDAO.insertNoticeAttach(session, attach);
+			}
+			session.commit();
+		} catch (SQLException e) {
+			session.rollback();
+			e.printStackTrace();
+			throw e;
+		} finally {
+			session.close();
+		}
+	}
+	
+	@Override
+	public void remove(int nno) throws SQLException {
+		SqlSession session = sqlSessionFactory.openSession(false);
+		try {
+			noticeDAO.deleteNotice(session, nno);
+			session.commit();
+		} catch (SQLException e) {
+			session.rollback();
+			e.printStackTrace();
+			throw e;
+		} finally {
+			session.close();
+		}
+	}
+	
+	@Override
+	public NoticeAttachVO getNoticeAttachVO(int nano) throws SQLException {
+		SqlSession session = sqlSessionFactory.openSession(false);
+		try {
+			NoticeAttachVO attach = noticeAttachDAO.selectNoticeAttachByNano(session, nano);
+			return attach;
+		} catch (SQLException e) {
+			session.rollback();
+			e.printStackTrace();
+			throw e;
+		} finally {
+			session.close();
+		}
+	}
+
+	@Override
+	public void removeNoticeAttachNano(int nano) throws SQLException {
+		SqlSession session = sqlSessionFactory.openSession(false);
+		try {
+			noticeAttachDAO.deleteNoticeAttach(session, nano);
+			
+			session.commit();
+		}catch(SQLException e) {
+			session.rollback();
+			e.printStackTrace();
+			throw e;
+		} finally {
+			session.close();
+		}
+	}
 }

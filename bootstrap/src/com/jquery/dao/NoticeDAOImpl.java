@@ -7,7 +7,6 @@ import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
 
 import com.jquery.command.SearchCriteria;
-import com.jquery.dto.BoardVO;
 import com.jquery.dto.NoticeVO;
 
 public class NoticeDAOImpl implements NoticeDAO{
@@ -32,8 +31,29 @@ public class NoticeDAOImpl implements NoticeDAO{
 	}
 	
 	@Override
+	public NoticeVO selectNoticeByNno(SqlSession session,int nno) throws SQLException {
+		NoticeVO notice=session.selectOne("Notice-Mapper.selectNoticeByNno",nno);
+		return notice;
+	}
+	
+	@Override
 	public void insertNotice(SqlSession session,NoticeVO notice) throws SQLException {	
 		session.update("Notice-Mapper.insertNotice",notice);
+	}
+	
+	@Override
+	public void updateNotice(SqlSession session, NoticeVO notice) throws SQLException {
+		session.update("Notice-Mapper.updateNotice",notice);		
+	}
+	
+	@Override
+	public void deleteNotice(SqlSession session,int nno) throws SQLException {
+		session.update("Notice-Mapper.deleteNotice",nno);
+	}
+	
+	@Override
+	public void increaseViewCnt(SqlSession session, int nno) throws SQLException {
+		session.update("Notice-Mapper.increaseViewCnt",nno);
 	}
 	
 	@Override
@@ -41,5 +61,7 @@ public class NoticeDAOImpl implements NoticeDAO{
 		int seq_num=session.selectOne("Notice-Mapper.selectNoticeSeqNext");
 		return seq_num;
 	}
+
+
 	
 }

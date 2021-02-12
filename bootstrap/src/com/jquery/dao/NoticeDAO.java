@@ -15,16 +15,16 @@ public interface NoticeDAO {
 
 	int selectNoticeCriteriaTotalCount(SqlSession session,SearchCriteria cri) throws SQLException;
 
-//	BoardVO selectNoticeByNno(SqlSession session,int nno) throws SQLException;
+	NoticeVO selectNoticeByNno(SqlSession session,int nno) throws SQLException;
 
 	void insertNotice(SqlSession session,NoticeVO notice) throws SQLException;
 
-//	void updateNotice(SqlSession session,NoticeVO notice) throws SQLException;
+	void updateNotice(SqlSession session,NoticeVO notice) throws SQLException;
 
-//	void deleteNotice(SqlSession session,int nno) throws SQLException;
+	void deleteNotice(SqlSession session,int nno) throws SQLException;
 
 	// viewcnt 증가
-//	void increaseViewCnt(SqlSession session,int nno) throws SQLException;
+	void increaseViewCnt(SqlSession session,int nno) throws SQLException;
 
 	// notice_seq.nextval 가져오기
 	int selectNoticeSeqNext(SqlSession session) throws SQLException;
