@@ -40,7 +40,7 @@
     <div class="content">
      		<div class="card">
 			<div class="card-header with-border">
-				<button type="button" class="btn btn-primary" id="registBtn" onclick="regist_go();">글등록</button>				
+				<button type="button" class="btn btn-primary" id="registBtn" onclick="OpenWindow('regist.do','글등록',800,700);">글등록</button>				
 				<div id="keyword" class="card-tools" style="width:550px;">
 					<div class="input-group row">	
 						 <!-- sort num -->
@@ -129,8 +129,6 @@
 </script>
 <script type="text/javascript">
 
-// alert(getCookie("keyword"));
-// alert("jquery cookie : " + $.cookie("keyword"));
 setPageParams($.cookie('page'), $.cookie('perPageNum'),$.cookie('searchType'),$.cookie('keyword'));
 
 showList();
@@ -141,8 +139,6 @@ function searchList_go(page){
 	
 	var pageParamsKeys = Object.keys(pageParams);
 	for(var key of pageParamsKeys){
-// 		alert(key);
-// 		setCookie(key,pageParams[key]);
 
 		$.cookie(key,pageParams[key],{path:"/"});
 	}

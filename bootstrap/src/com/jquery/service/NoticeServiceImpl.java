@@ -10,9 +10,11 @@ import org.apache.ibatis.session.SqlSessionFactory;
 
 import com.jquery.command.PageMaker;
 import com.jquery.command.SearchCriteria;
+import com.jquery.dao.NoticeAttachDAO;
+import com.jquery.dao.NoticeAttachDAOImpl;
 import com.jquery.dao.NoticeDAO;
 import com.jquery.dao.NoticeDAOImpl;
-import com.jquery.dto.BoardVO;
+import com.jquery.dto.NoticeAttachVO;
 import com.jquery.dto.NoticeVO;
 import com.jquery.mybatis.OracleIBatisSqlSessionFactory;
 
@@ -39,6 +41,11 @@ public class NoticeServiceImpl implements NoticeService {
 	public void setNoticeDAO(NoticeDAO noticeDAO) {
 		this.noticeDAO = noticeDAO;
 	}
+	private NoticeAttachDAO noticeAttachDAO = new NoticeAttachDAOImpl();
+	public void setNoticeAttachDAO(NoticeAttachDAO noticeAttachDAO) {
+		this.noticeAttachDAO = noticeAttachDAO;
+	}
+
 
 	@Override
 	public Map<String, Object> getNoticeList(SearchCriteria cri) throws SQLException {
@@ -63,6 +70,31 @@ public class NoticeServiceImpl implements NoticeService {
 			session.commit();
 			
 			return dataMap;
+		} catch (SQLException e) {
+			session.rollback();
+			e.printStackTrace();
+			throw e;
+		} finally {
+			session.close();
+		}
+	}
+	
+	@Override
+	public void regist(NoticeVO notice) throws SQLException {
+		SqlSession session = sqlSessionFactory.openSession(false);
+		try {
+			int nno = noticeDAO.selectNoticeSeqNext(session);
+
+			notice.setNno(nno);
+
+			noticeDAO.insertNotice(session, notice);
+
+			for (NoticeAttachVO noticeAttach : notice.getNoticeAttachList()) {
+				noticeAttach.setNno(nno);
+				noticeAttach.setAttacher(notice.getWriter());
+				noticeAttachDAO.insertNoticeAttach(session, noticeAttach);
+			}
+			session.commit();
 		} catch (SQLException e) {
 			session.rollback();
 			e.printStackTrace();

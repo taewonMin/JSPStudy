@@ -31,4 +31,15 @@ public class NoticeDAOImpl implements NoticeDAO{
 		return count;
 	}
 	
+	@Override
+	public void insertNotice(SqlSession session,NoticeVO notice) throws SQLException {	
+		session.update("Notice-Mapper.insertNotice",notice);
+	}
+	
+	@Override
+	public int selectNoticeSeqNext(SqlSession session) throws SQLException {
+		int seq_num=session.selectOne("Notice-Mapper.selectNoticeSeqNext");
+		return seq_num;
+	}
+	
 }

@@ -1,23 +1,28 @@
 package com.jquery.dto;
 
+import java.util.Date;
+import java.util.List;
+
 public class NoticeVO {
-	private String nno;
+	private int nno;
 	private String title;
 	private String writer;
 	private String content;
-	private String regdate;
-	private String viewcnt;
-	private String point;
-	private String startdate;
-	private String enddate;
-	private String updatedate;
+	private Date regdate;
+	private int viewcnt;
+	private int point;
+	private Date startdate;
+	private Date enddate;
+	private Date updatedate;
 	private String dist;
 	
+	List<NoticeAttachVO> noticeAttachList; //첨부파일
 	
-	public String getNno() {
+	
+	public int getNno() {
 		return nno;
 	}
-	public void setNno(String nno) {
+	public void setNno(int nno) {
 		this.nno = nno;
 	}
 	public String getTitle() {
@@ -38,40 +43,40 @@ public class NoticeVO {
 	public void setContent(String content) {
 		this.content = content;
 	}
-	public String getRegdate() {
+	public Date getRegdate() {
 		return regdate;
 	}
-	public void setRegdate(String regdate) {
+	public void setRegdate(Date regdate) {
 		this.regdate = regdate;
 	}
-	public String getViewcnt() {
+	public int getViewcnt() {
 		return viewcnt;
 	}
-	public void setViewcnt(String viewcnt) {
+	public void setViewcnt(int viewcnt) {
 		this.viewcnt = viewcnt;
 	}
-	public String getPoint() {
+	public int getPoint() {
 		return point;
 	}
-	public void setPoint(String point) {
+	public void setPoint(int point) {
 		this.point = point;
 	}
-	public String getStartdate() {
+	public Date getStartdate() {
 		return startdate;
 	}
-	public void setStartdate(String startdate) {
+	public void setStartdate(Date startdate) {
 		this.startdate = startdate;
 	}
-	public String getEnddate() {
+	public Date getEnddate() {
 		return enddate;
 	}
-	public void setEnddate(String enddate) {
+	public void setEnddate(Date enddate) {
 		this.enddate = enddate;
 	}
-	public String getUpdatedate() {
+	public Date getUpdatedate() {
 		return updatedate;
 	}
-	public void setUpdatedate(String updatedate) {
+	public void setUpdatedate(Date updatedate) {
 		this.updatedate = updatedate;
 	}
 	public String getDist() {
@@ -80,11 +85,20 @@ public class NoticeVO {
 	public void setDist(String dist) {
 		this.dist = dist;
 	}
-	
+	public List<NoticeAttachVO> getNoticeAttachList() {
+		return noticeAttachList;
+	}
+	public void setNoticeAttachList(List<NoticeAttachVO> noticeAttachList) {
+		this.noticeAttachList = noticeAttachList;
+	}
 	@Override
 	public String toString() {
 		return "NoticeVO [nno=" + nno + ", title=" + title + ", writer=" + writer + ", content=" + content
 				+ ", regdate=" + regdate + ", viewcnt=" + viewcnt + ", point=" + point + ", startdate=" + startdate
-				+ ", enddate=" + enddate + ", updatedate=" + updatedate + ", dist=" + dist + "]";
+				+ ", enddate=" + enddate + ", updatedate=" + updatedate + ", dist=" + dist + ", noticeAttachList="
+				+ noticeAttachList + "]";
 	}
+	
+	
+	
 }

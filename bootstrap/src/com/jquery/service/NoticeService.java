@@ -1,12 +1,10 @@
 package com.jquery.service;
 
 import java.sql.SQLException;
-import java.util.List;
 import java.util.Map;
 
 import com.jquery.command.SearchCriteria;
-import com.jquery.dto.AttachVO;
-import com.jquery.dto.BoardVO;
+import com.jquery.dto.NoticeVO;
 
 public interface NoticeService {
 	
@@ -17,8 +15,8 @@ public interface NoticeService {
 //	BoardVO getBoard(int bno)throws SQLException;	
 //	BoardVO getBoardForModify(int bno)throws SQLException;
 //	
-//	// 등록
-//	void regist(BoardVO board)throws SQLException;
+	// 등록
+	void regist(NoticeVO notice)throws SQLException;
 //		
 //	// 수정
 //	void modify(BoardVO board)throws SQLException;

@@ -17,7 +17,7 @@ public interface NoticeDAO {
 
 //	BoardVO selectNoticeByNno(SqlSession session,int nno) throws SQLException;
 
-//	void insertNotice(SqlSession session,NoticeVO notice) throws SQLException;
+	void insertNotice(SqlSession session,NoticeVO notice) throws SQLException;
 
 //	void updateNotice(SqlSession session,NoticeVO notice) throws SQLException;
 
@@ -27,6 +27,6 @@ public interface NoticeDAO {
 //	void increaseViewCnt(SqlSession session,int nno) throws SQLException;
 
 	// notice_seq.nextval 가져오기
-//	int selectNoticeSeqNext(SqlSession session) throws SQLException;
+	int selectNoticeSeqNext(SqlSession session) throws SQLException;
 
 }
