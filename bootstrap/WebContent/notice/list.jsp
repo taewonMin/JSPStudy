@@ -9,9 +9,9 @@
   <title>Board | home</title>
 
   <!-- Font Awesome Icons -->
-  <link rel="stylesheet" href="/resources/bootstrap/plugins/fontawesome-free/css/all.min.css">
+  <link rel="stylesheet" href="<%=request.getContextPath() %>/resources/bootstrap/plugins/fontawesome-free/css/all.min.css">
   <!-- Theme style -->
-  <link rel="stylesheet" href="/resources/bootstrap/dist/css/adminlte.min.css">
+  <link rel="stylesheet" href="<%=request.getContextPath() %>/resources/bootstrap/dist/css/adminlte.min.css">
   <!-- Google Font: Source Sans Pro -->
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
 </head>
@@ -27,7 +27,7 @@
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">목 록</a></li>
+              <li class="breadcrumb-item"><a href="javascript:initPageParam();searchList_go(1);">목 록</a></li>
               <li class="breadcrumb-item active">Notice Board</li>
             </ol>
           </div><!-- /.col -->
@@ -70,7 +70,7 @@
 				</div>						
 			</div>
 			<div class="card-body">
-				<table class="table table-bordered text-center boardList" >					
+				<table class="table table-bordered text-center noticeList" >					
 					<tr style="font-size:0.95em;">
 						<th style="width:10%;">번 호</th>
 						<th style="width:50%;">제 목</th>
@@ -96,11 +96,11 @@
 <!-- REQUIRED SCRIPTS -->
 
 <!-- jQuery -->
-<script src="/resources/bootstrap/plugins/jquery/jquery.min.js"></script>
+<script src="<%=request.getContextPath() %>/resources/bootstrap/plugins/jquery/jquery.min.js"></script>
 <!-- Bootstrap 4 -->
-<script src="/resources/bootstrap/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="<%=request.getContextPath() %>/resources/bootstrap/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- AdminLTE App -->
-<script src="/resources/bootstrap/dist/js/adminlte.min.js"></script>
+<script src="<%=request.getContextPath() %>/resources/bootstrap/dist/js/adminlte.min.js"></script>
 <!-- handlebars -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.6/handlebars.min.js" ></script>
 
@@ -109,47 +109,25 @@
 
 
 <!-- common -->
-<script src="/resources/js/common.js?v=1"></script>
+<script src="<%=request.getContextPath() %>/resources/js/common.js?v=1"></script>
 
 <script  type="text/x-handlebars-template"  id="notice-td-template">
 {{#each .}}
-<tr style='font-size:0.85em;' class="board">
+<tr style='font-size:0.85em;' class="notice">
 	<td>{{nno }}</td>
 	<td style="text-align:left;max-width: 100px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
-		<a href="javascript:initPageParam('reply_');OpenWindow('detail.html?nno={{nno }}','상세보기',800,700);">
+		<a href="javascript:initPageParam();OpenWindow('detail.do?nno={{nno }}','상세보기',800,700);">
 			<span class="col-sm-12 ">{{title }}
-				<span class="nav-item" style="display:{{hasReplyCnt replycnt}};">															
-					&nbsp;&nbsp;<i class="fa fa-comment"></i>
-					<span class="badge badge-warning navbar-badge">{{replycnt}}</span>
-				</span>
 			</span>
 		</a>
 	</td>
 	<td>{{writer }}</td>
-	<td>{{prettifyDate regDate }}</td>
+	<td>{{prettifyDate regdate }}</td>
 	<td><span class="badge bg-red">{{viewcnt }}</span></td>
 </tr>
 {{/each}}
 </script>
 <script type="text/javascript">
-
-function regist_go(){
-	
-	$.ajax({
-		url:'/session/getLoginUser.do',
-		type:'get',
-		success:function(data){
-			OpenWindow('registForm.html','글등록',800,700);
-		},
-		error:function(data){
-			alert("로그인은 필수입니다.");
-			window.parent.location.href="/common/loginForm.html";
-			window.close();
-		}
-	});
-}
-
-
 
 // alert(getCookie("keyword"));
 // alert("jquery cookie : " + $.cookie("keyword"));
@@ -175,21 +153,18 @@ function searchList_go(page){
 function showList(){
 	
 	if($.cookie('perPageNum'))
-		$('select[name="perPageNum"] > option[value="'+ $.cookie('perPageNum') +'"]').prop('selected',true);
-// 		$('select[name="perPageNum"]').val($.cookie("perPageNum"));
+		$('select[name="perPageNum"]').val($.cookie("perPageNum"));
 	if($.cookie('searchType'))
-		$('select[name="searchType"] > option[value="'+ $.cookie('searchType') +'"]').prop('selected',true);
-// 		$('select[name="searchType"]').val($.cookie("searchType"));
+		$('select[name="searchType"]').val($.cookie("searchType"));
 	if($.cookie('keword'))
 		$('input[name="keyword"]').val($.cookie("keyword"));
 	
 	$.ajax({
-		url: '/board/list.do',
+		url: '/notice/list.do',
 		type: "post", 	// 반드시 'post' 보낼 것.
 		data: JSON.stringify(pageParams),
 		success: function(data){
-// 			alert(data.boardList.length);
-			printData(data.boardList,$('.boardList'),$('#board-td-template'),'tr.board');
+			printData(data.noticeList,$('.noticeList'),$('#notice-td-template'),'tr.notice');
 			printPaging(data.pageMaker,$('ul.pagination'));
 		},
 		error:function(){

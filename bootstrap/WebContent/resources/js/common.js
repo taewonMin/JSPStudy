@@ -68,6 +68,13 @@ function getParameterValueFromUrl(paramName){
 // handlebars printElement (args : data Array, append target, handlebar template, remove class)
 function printData(dataArr, target, templateObject, removeClass){
 	
+	Handlebars.registerHelper({
+		"hasReplyCnt":function(replycnt){
+			return (replycnt > 0) ? 'visible' : 'none';
+		},
+		"prettifyDate" : prettifyDate
+	});
+	
 	var template = Handlebars.compile(templateObject.html());
 	
 	var html = template(dataArr);
@@ -76,12 +83,6 @@ function printData(dataArr, target, templateObject, removeClass){
 	target.append(html);
 }
 
-Handlebars.registerHelper({
-	"hasReplyCnt":function(replycnt){
-		return (replycnt > 0) ? 'visible' : 'none';
-	},
-	"prettifyDate" : prettifyDate
-});
 
 // java.util.Date().getTimes()를 변환.
 function prettifyDate(timeValue){
@@ -172,15 +173,6 @@ function summernote_start(content){
 				}
 			}
 		}
-// 	,toolbar: [
-// 	    [groupName, [list of button]]
-// 	    ['style', ['bold', 'italic', 'underline', 'clear']],
-// 	    ['font', ['strikethrough', 'superscript', 'subscript']],
-// 	    ['fontsize', ['fontsize']],
-// 	    ['color', ['color']],
-// 	    ['para', ['ul', 'ol', 'paragraph']],
-// 	    ['height', ['height']]
-// 	  ]
 	});
 }
 
