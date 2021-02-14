@@ -117,7 +117,7 @@
 <script  type="text/x-handlebars-template"  id="attach-div-template">
 {{#each .}}
 	<div class="col-md-4 col-sm-4 col-xs-12 attach"  style="cursor:pointer;"
-		 onclick="location.href='/board/attach/getFile.do?nno={{nno }}&nano={{nano }}';">
+		 onclick="location.href='/notice/attach/getFile.do?nno={{nno }}&nano={{nano }}';">
 		<div class="info-box">	
 		 	<span class="info-box-icon bg-yellow">
 				<i class="fa fa-copy"></i>

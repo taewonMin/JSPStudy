@@ -187,7 +187,7 @@ $('#modifyBtn').on('click',function(e){
 <li class="attach-item">																			
 	<div class="mailbox-attachment-info float-left ">
 		<a class="mailbox-attachment-name row" name="attachedFile" attach-fileName="{{filename }}" attach-no="{{nano }}"
-			 href="/board/attach/getFile.html?nno={{nno }}&nano={{nano }}"  >													
+			 href="/notice/attach/getFile.do?nno={{nno }}&nano={{nano }}"  >													
 			<span><i class="fas fa-paperclip"></i>{{filename }}&nbsp;&nbsp;</span>
 			<button type="button" style="border:0;outline:0;" class="badge badge-danger">X</button>
 		</a>																			
@@ -201,7 +201,7 @@ $('div.attachList').on('click','a[name="attachedFile"] > button', function(event
 	var parent = $(this).parent('a[name="attachedFile"]');
 	alert(parent.attr("attach-fileName")+"파일을 삭제합니다.");
 	
-	var ano = parent.attr("attach-no");
+	var nano = parent.attr("attach-no");
 	
 	$(this).parents('li.attach-item').remove();
 	

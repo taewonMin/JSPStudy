@@ -91,7 +91,7 @@ public class NoticeModifyHandler implements CommandHandler {
 					
 					String fileName = new File(item.getName()).getName();
 					String UUID = MakeFileName.toUUIDFileName(fileName, "$$");
-					String filePath = uploadPath + File.separator + fileName;
+					String filePath = uploadPath + File.separator + UUID;
 					File storeFile = new File(filePath);
 					
 					// local HDD에 저장
