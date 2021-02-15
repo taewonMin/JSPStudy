@@ -6,7 +6,6 @@ import java.util.List;
 import org.apache.ibatis.session.SqlSession;
 
 import com.jquery.command.SearchCriteria;
-import com.jquery.dto.BoardVO;
 import com.jquery.dto.NoticeVO;
 
 public interface NoticeDAO {

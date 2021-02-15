@@ -10,8 +10,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
-import com.jquery.dto.AttachVO;
-import com.jquery.dto.BoardVO;
 import com.jquery.dto.NoticeAttachVO;
 import com.jquery.dto.NoticeVO;
 import com.jquery.service.NoticeService;

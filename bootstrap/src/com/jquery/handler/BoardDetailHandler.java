@@ -13,8 +13,6 @@ import com.jquery.service.BoardServiceImpl;
 import com.jquery.utils.JsonResolver;
 import com.jquery.utils.MakeFileName;
 
-import jdk.nashorn.internal.ir.RuntimeNode.Request;
-
 public class BoardDetailHandler implements CommandHandler {
 
 	private BoardService boardService = BoardServiceImpl.getInstance();

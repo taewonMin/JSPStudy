@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
 
-import com.jquery.dto.AttachVO;
 import com.jquery.dto.NoticeAttachVO;
 
 public interface NoticeAttachDAO {

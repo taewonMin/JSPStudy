@@ -8,7 +8,6 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.jquery.dto.AttachVO;
 import com.jquery.dto.NoticeAttachVO;
 import com.jquery.dto.NoticeVO;
 import com.jquery.service.NoticeService;

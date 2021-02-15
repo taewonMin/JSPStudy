@@ -6,7 +6,7 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Board | home</title>
+  <title>Notice | home</title>
 
   <!-- Font Awesome Icons -->
   <link rel="stylesheet" href="<%=request.getContextPath() %>/resources/bootstrap/plugins/fontawesome-free/css/all.min.css">
@@ -38,7 +38,7 @@
 
     <!-- Main content -->
     <div class="content">
-     		<div class="card">
+   		<div class="card">
 			<div class="card-header with-border">
 				<button type="button" class="btn btn-primary" id="registBtn" onclick="OpenWindow('regist.do','글등록',800,700);">글등록</button>				
 				<div id="keyword" class="card-tools" style="width:550px;">
@@ -78,7 +78,7 @@
 						<th>등록일</th>
 						<th style="width:10%;">조회수</th>
 					</tr>				
-		
+					
 				</table>				
 			</div>
 			<div class="card-footer">

@@ -14,8 +14,6 @@ import com.jquery.dao.NoticeAttachDAO;
 import com.jquery.dao.NoticeAttachDAOImpl;
 import com.jquery.dao.NoticeDAO;
 import com.jquery.dao.NoticeDAOImpl;
-import com.jquery.dto.AttachVO;
-import com.jquery.dto.BoardVO;
 import com.jquery.dto.NoticeAttachVO;
 import com.jquery.dto.NoticeVO;
 import com.jquery.mybatis.OracleIBatisSqlSessionFactory;
