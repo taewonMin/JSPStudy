@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.UUID;
 
 import com.jquery.dto.AttachVO;
+import com.jquery.dto.NoticeAttachVO;
 
 public class MakeFileName {
 
@@ -33,5 +34,22 @@ public class MakeFileName {
 			}
 		}
 		return renamedAttachList;
+	}
+	
+	public static List<NoticeAttachVO> parseFileNameFromNoticeAttaches(List<NoticeAttachVO> noticeAttachList, String delimiter) {
+		
+		List<NoticeAttachVO> renamedNoticeAttachList = new ArrayList<NoticeAttachVO>();
+		
+		if(noticeAttachList != null) {
+			for(NoticeAttachVO noticeAttach : noticeAttachList) {
+				String fileName = noticeAttach.getFilename();	// DB상의 fileName
+				fileName = parseFileNameFromUUID(fileName, delimiter);	// uuid가 제거된 fileName
+				
+				noticeAttach.setFilename(fileName);
+				
+				renamedNoticeAttachList.add(noticeAttach);
+			}
+		}
+		return renamedNoticeAttachList;
 	}
 }
