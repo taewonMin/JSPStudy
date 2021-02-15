@@ -26,11 +26,18 @@ public class NoticeListHandler implements CommandHandler {
 			
 			String url = "/notice/list.jsp";
 
+//			Map<String, Object> dataMap = noticeService.getNoticeList(new SearchCriteria());
+//			
+//			ObjectMapper mapper = new ObjectMapper();
+//			
+//			response.setContentType("application/json;charset=utf-8");
+//			
+//			request.setAttribute("dataMap", mapper.writeValueAsString(dataMap));
+				
 			return url;
 		}else if(request.getMethod().equals("POST")) {
 			
 			ObjectMapper mapper = new ObjectMapper();
-			
 			SearchCriteria cri = mapper.readValue(request.getReader(), SearchCriteria.class);
 			
 			try {
