@@ -1,7 +1,9 @@
-var mCode = getParameterValueFromUrl('mCode');
+var mCode = "";
 
 if(!mCode){
 	mCode = "M000000";
+}else {
+	mCode = getParameterValueFromUrl('mCode');
 }
 
 $.ajax({
