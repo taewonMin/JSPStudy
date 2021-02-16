@@ -22,35 +22,32 @@ public class NoticeListHandler implements CommandHandler {
 
 	@Override
 	public String process(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		if(request.getMethod().equals("GET")) {
-			
-			String url = "/notice/list.jsp";
+		String url = "/notice/list.jsp";
 
-//			Map<String, Object> dataMap = noticeService.getNoticeList(new SearchCriteria());
-//			
-//			ObjectMapper mapper = new ObjectMapper();
-//			
-//			response.setContentType("application/json;charset=utf-8");
-//			
-//			request.setAttribute("dataMap", mapper.writeValueAsString(dataMap));
-				
-			return url;
-		}else if(request.getMethod().equals("POST")) {
-			
-			ObjectMapper mapper = new ObjectMapper();
-			SearchCriteria cri = mapper.readValue(request.getReader(), SearchCriteria.class);
-			
-			try {
-				Map<String, Object> dataMap = noticeService.getNoticeList(cri);
-				
-				JsonResolver.view(response, dataMap);
-				
-			}catch(Exception e) {
-				response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-				e.printStackTrace();
-			}
-		}
-		return null;
+		SearchCriteria cri = new SearchCriteria();
+		
+		String page = request.getParameter("page");
+		String perPageNum = request.getParameter("perPageNum");
+		String searchType = request.getParameter("searchType");
+		String keyword = request.getParameter("keyword");
+		
+		System.out.println(page);
+		System.out.println(perPageNum);
+		System.out.println(searchType);
+		System.out.println(keyword);
+		
+		cri.setPage(page);
+		cri.setPerPageNum(perPageNum);
+		cri.setSearchType(searchType);
+		cri.setKeyword(keyword);
+		
+		Map<String, Object> dataMap = noticeService.getNoticeList(cri);
+		
+		request.setAttribute("noticeList", dataMap.get("noticeList"));
+		request.setAttribute("pageMaker", dataMap.get("pageMaker"));
+		request.setAttribute("cri", cri);
+		
+		return url;
 	}
 
 }

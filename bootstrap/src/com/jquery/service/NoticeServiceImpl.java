@@ -49,8 +49,7 @@ public class NoticeServiceImpl implements NoticeService {
 
 	@Override
 	public Map<String, Object> getNoticeList(SearchCriteria cri) throws SQLException {
-		SqlSession session = sqlSessionFactory.openSession(false);
-		Map<String, Object> dataMap = new HashMap<String, Object>();
+		SqlSession session = sqlSessionFactory.openSession();
 
 		try {
 			// 현재 page 번호에 맞는 리스트를 perPageNum 개수 만큼 가져오기.
@@ -64,16 +63,11 @@ public class NoticeServiceImpl implements NoticeService {
 			pageMaker.setCri(cri);
 			pageMaker.setTotalCount(totalCount);
 
+			Map<String, Object> dataMap = new HashMap<String, Object>();
 			dataMap.put("noticeList", noticeList);
 			dataMap.put("pageMaker", pageMaker);
 			
-			session.commit();
-			
 			return dataMap;
-		} catch (SQLException e) {
-			session.rollback();
-			e.printStackTrace();
-			throw e;
 		} finally {
 			session.close();
 		}

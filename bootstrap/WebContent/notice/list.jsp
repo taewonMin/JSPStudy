@@ -1,3 +1,6 @@
+<%@page import="com.jquery.command.PageMaker"%>
+<%@page import="java.util.List"%>
+<%@page import="com.jquery.dto.NoticeVO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ page trimDirectiveWhitespaces="true" %>
@@ -41,25 +44,24 @@
    		<div class="card">
 			<div class="card-header with-border">
 				<button type="button" class="btn btn-primary" id="registBtn" onclick="OpenWindow('regist.do','글등록',800,700);">글등록</button>				
-				<div id="keyword" class="card-tools" style="width:550px;">
+				<div class="card-tools" style="width:550px;">
 					<div class="input-group row">	
 						 <!-- sort num -->
 					  	<select class="form-control col-md-3" name="perPageNum" id="perPageNum">
-					  		<option value="10" >정렬개수</option>
-					  		<option value="20">20개씩</option>
-					  		<option value="30">30개씩</option>
-					  		<option value="50">50개씩</option>
-					  		
+					  		<option value="10">정렬개수</option>
+					  		<option value="20" ${cri.perPageNum eq 20 ? 'selected':'' }>20개씩</option>
+					  		<option value="30" ${cri.perPageNum eq 30 ? 'selected':'' }>30개씩</option>
+					  		<option value="50" ${cri.perPageNum eq 50 ? 'selected':'' }>50개씩</option>
 					  	</select>					
 						<select class="form-control col-md-3" name="searchType" id="searchType">
-							<option value="tcw" >전 체</option>
-							<option value="t">제 목</option>
-							<option value="w" >작성자</option>
-							<option value="c">내 용</option>
-							<option value="tc">제목+내용</option>
-							<option value="cw">작성자+내용</option>							
+							<option value="tcw" ${cri.searchType eq '' ? 'selected':'' }>전 체</option>
+							<option value="t" ${cri.searchType eq 't' ? 'selected':'' }>제 목</option>
+							<option value="w" ${cri.searchType eq 'w' ? 'selected':'' }>작성자</option>
+							<option value="c" ${cri.searchType eq 'c' ? 'selected':'' }>내 용</option>
+							<option value="tc" ${cri.searchType eq 'tc' ? 'selected':'' }>제목+내용</option>
+							<option value="cw" ${cri.searchType eq 'cw' ? 'selected':'' }>작성자+내용</option>							
 						</select>					
-						<input  class="form-control col-md-5" type="text" name="keyword" placeholder="검색어를 입력하세요." value=""/>
+						<input  class="form-control col-md-5" type="text" name="keyword" id="keyword" placeholder="검색어를 입력하세요." value=""/>
 						<span class="input-group-append col-me-1">
 							<button class="btn btn-primary" type="button" onclick="searchList_go(1);" 
 							data-card-widget="search">
@@ -79,12 +81,70 @@
 						<th style="width:10%;">조회수</th>
 					</tr>				
 					
+					<% List<NoticeVO> noticeList = (List<NoticeVO>) request.getAttribute("noticeList");
+						for(NoticeVO notice : noticeList){
+							pageContext.setAttribute("notice", notice);
+					%>
+					
+					<tr style='font-size:0.85em;'>
+						<td>${notice.nno }</td>
+						<td style="text-align:left;max-width: 100px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
+							<a href="javascript:initPageParam();OpenWindow('detail.do?nno=${notice.nno }','상세보기',800,700);">
+								<span class="col-sm-12 ">${notice.title }
+								</span>
+							</a>
+						</td>
+						<td>${notice.writer }</td>
+						<td>${notice.regdate }</td>
+						<td><span class="badge bg-red">${notice.viewcnt }</span></td>
+					</tr>
+					
+					<%
+						}
+					%>
+										
 				</table>				
 			</div>
 			<div class="card-footer">
-				<ul id="pagination" class="pagination justify-content-center m-0">
-								
-				</ul>		
+				<nav aria-label="member list Navigation">
+				 	<ul class="pagination justify-content-center m-0">
+				 		<li class="page-item">
+							<a class="page-link" href="javascript:searchList_go(1);">
+							<i class="fas fa-angle-double-left"></i>
+							</a>
+						</li>
+						<li class="page-item">
+							<a class="page-link" href="javascript:searchList_go(
+							${pageMaker.prev ? pageMaker.startPage-1 : 1}				
+							);"><i class="fas fa-angle-left"></i></a>
+						</li>
+						
+						<% 	PageMaker pageMaker = (PageMaker) request.getAttribute("pageMaker");
+							for(int i=pageMaker.getStartPage(); i<pageMaker.getEndPage()+1; i++){
+								pageContext.setAttribute("pageNum", i);
+						%>
+						
+						<li class="page-item ${pageMaker.cri.page == pageNum?'active':''}">
+							<a class="page-link" href="javascript:searchList_go(${pageNum});" >${pageNum }
+							</a>
+						</li>
+						
+						<%	
+							}
+						%>
+						
+						<li class="page-item">
+							<a class="page-link" href="javascript:searchList_go(
+							${pageMaker.next ? pageMaker.endPage+1 : pageMaker.cri.page}			
+							);"><i class="fas fa-angle-right" ></i></a>
+						</li>
+						<li class="page-item">
+							<a class="page-link" href="javascript:searchList_go(
+								${pageMaker.realEndPage} );">
+								<i class="fas fa-angle-double-right"></i></a>
+						</li>	
+				 	</ul>
+				 </nav>
 			</div>
 		</div>
 		
@@ -111,63 +171,27 @@
 <!-- common -->
 <script src="<%=request.getContextPath() %>/resources/js/common.js?v=1"></script>
 
-<script  type="text/x-handlebars-template"  id="notice-td-template">
-{{#each .}}
-<tr style='font-size:0.85em;' class="notice">
-	<td>{{nno }}</td>
-	<td style="text-align:left;max-width: 100px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
-		<a href="javascript:initPageParam();OpenWindow('detail.do?nno={{nno }}','상세보기',800,700);">
-			<span class="col-sm-12 ">{{title }}
-			</span>
-		</a>
-	</td>
-	<td>{{writer }}</td>
-	<td>{{prettifyDate regdate }}</td>
-	<td><span class="badge bg-red">{{viewcnt }}</span></td>
-</tr>
-{{/each}}
-</script>
 <script type="text/javascript">
 
-setPageParams($.cookie('page'), $.cookie('perPageNum'),$.cookie('searchType'),$.cookie('keyword'));
-
-showList();
-
 function searchList_go(page){
-	//$.ajax data 생성
-	setPageParams(page, $('select[name="perPageNum"]').val(), $('select[name="searchType"]').val(),$('input[name="keyword"]').val());
+	var form = $('<form action="list.do" method="post"></form>');
+	form.appendTo('body');
 	
-	var pageParamsKeys = Object.keys(pageParams);
-	for(var key of pageParamsKeys){
-
-		$.cookie(key,pageParams[key],{path:"/"});
-	}
-	
-	showList();
+    var page = $("<input type='hidden' value="+page+" name='page'>");
+    form.append(page);
+    
+    if($('#keyword').val().trim() != ""){
+	    var perPageNum = $("<input type='hidden' value="+$('#perPageNum').val()+" name='perPageNum'>");
+	    var searchType = $("<input type='hidden' value="+$('#searchType').val()+" name='searchType'>");
+	    var keyword = $("<input type='hidden' value="+$('#keyword').val()+" name='keyword'>");
+	    
+	    form.append(perPageNum);
+	    form.append(searchType);
+	    form.append(keyword);
+    }
+    form.submit();
 }
 
-function showList(){
-	
-	if($.cookie('perPageNum'))
-		$('select[name="perPageNum"]').val($.cookie("perPageNum"));
-	if($.cookie('searchType'))
-		$('select[name="searchType"]').val($.cookie("searchType"));
-	if($.cookie('keword'))
-		$('input[name="keyword"]').val($.cookie("keyword"));
-	
-	$.ajax({
-		url: '/notice/list.do',
-		type: "post", 	// 반드시 'post' 보낼 것.
-		data: JSON.stringify(pageParams),
-		success: function(data){
-			printData(data.noticeList,$('.noticeList'),$('#notice-td-template'),'tr.notice');
-			printPaging(data.pageMaker,$('ul.pagination'));
-		},
-		error:function(){
-			alert("시스템장애로 현재 서비스가 불가합니다.");
-		}
-	});
-}
 </script>
 
 </body>
