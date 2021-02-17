@@ -45,7 +45,6 @@ public class NoticeListHandler implements CommandHandler {
 		
 		request.setAttribute("noticeList", dataMap.get("noticeList"));
 		request.setAttribute("pageMaker", dataMap.get("pageMaker"));
-		request.setAttribute("cri", cri);
 		
 		return url;
 	}

@@ -1,9 +1,15 @@
+<%@page import="com.jquery.command.SearchCriteria"%>
 <%@page import="com.jquery.command.PageMaker"%>
 <%@page import="java.util.List"%>
 <%@page import="com.jquery.dto.NoticeVO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ page trimDirectiveWhitespaces="true" %>
+
+<%
+	SearchCriteria cri = ((PageMaker)request.getAttribute("pageMaker")).getCri();
+	pageContext.setAttribute("cri", cri);
+%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -44,10 +50,10 @@
    		<div class="card">
 			<div class="card-header with-border">
 				<button type="button" class="btn btn-primary" id="registBtn" onclick="OpenWindow('regist.do','글등록',800,700);">글등록</button>				
-				<div class="card-tools" style="width:550px;">
+				<div id="keyword" class="card-tools" style="width:550px;">
 					<div class="input-group row">	
 						 <!-- sort num -->
-					  	<select class="form-control col-md-3" name="perPageNum" id="perPageNum">
+					  	<select class="form-control col-md-3" name="perPageNum" id="perPageNum" onChange="searchList_go(1);">
 					  		<option value="10">정렬개수</option>
 					  		<option value="20" ${cri.perPageNum eq 20 ? 'selected':'' }>20개씩</option>
 					  		<option value="30" ${cri.perPageNum eq 30 ? 'selected':'' }>30개씩</option>
@@ -61,7 +67,7 @@
 							<option value="tc" ${cri.searchType eq 'tc' ? 'selected':'' }>제목+내용</option>
 							<option value="cw" ${cri.searchType eq 'cw' ? 'selected':'' }>작성자+내용</option>							
 						</select>					
-						<input  class="form-control col-md-5" type="text" name="keyword" id="keyword" placeholder="검색어를 입력하세요." value=""/>
+						<input  class="form-control col-md-5" type="text" name="keyword" placeholder="검색어를 입력하세요." value="${cri.keyword }"/>
 						<span class="input-group-append col-me-1">
 							<button class="btn btn-primary" type="button" onclick="searchList_go(1);" 
 							data-card-widget="search">
@@ -153,6 +159,13 @@
   </div>
   <!-- /.content-wrapper -->
 
+<form id="pageForm">
+	<input type="hidden" name="page" value="${cri.page }">
+	<input type="hidden" name="perPageNum" value="${cri.perPageNum }">
+	<input type="hidden" name="searchType" value="${cri.searchType }">
+	<input type="hidden" name="keyword" value="${cri.keyword}">
+</form>
+
 <!-- REQUIRED SCRIPTS -->
 
 <!-- jQuery -->
@@ -172,23 +185,21 @@
 <script src="<%=request.getContextPath() %>/resources/js/common.js?v=1"></script>
 
 <script type="text/javascript">
-
-function searchList_go(page){
-	var form = $('<form action="list.do" method="post"></form>');
-	form.appendTo('body');
+function searchList_go(page, url){
 	
-    var page = $("<input type='hidden' value="+page+" name='page'>");
-    form.append(page);
-    
-    if($('#keyword').val().trim() != ""){
-	    var perPageNum = $("<input type='hidden' value="+$('#perPageNum').val()+" name='perPageNum'>");
-	    var searchType = $("<input type='hidden' value="+$('#searchType').val()+" name='searchType'>");
-	    var keyword = $("<input type='hidden' value="+$('#keyword').val()+" name='keyword'>");
-	    
-	    form.append(perPageNum);
-	    form.append(searchType);
-	    form.append(keyword);
-    }
+	var form = $('#pageForm');
+	
+	form.find('[name="page"]').val(page);
+	form.find('[name="perPageNum"]').val($('select[name="perPageNum"]').val());
+	form.find('[name="searchType"]').val($('select[name="searchType"]').val());
+	form.find('[name="keyword"]').val($('div.input-group>input[name="keyword"]').val());
+	
+	form.attr("method","post");
+	if(url){
+		form.attr("action",url);
+	}else{
+		form.attr("action","list.do");
+	}
     form.submit();
 }
 
