@@ -33,7 +33,7 @@
 		<div class="register-box" style="min-width:450px;">	
 			<div class="register-card-body">	
 				<div class="row">					
-					<input type="hidden" name="oldPicture" value="" />
+					<input type="hidden" name="oldPicture" value="${member.picture }" />
 					<input type="file" id="inputFile" name="picture" style="display:none" />
 					<div class="input-group col-md-12">
 						<div class="col-md-12" style="text-align: center;">
@@ -99,7 +99,7 @@
                 </div>  
 				
 				<div class="card-footer row" style="margin-top: 0; border-top: none;">						
-					<button type="button" id="modifyBtn" 
+					<button type="button" id="modifyBtn" onclick="modify_go();"
 						class="btn btn-warning col-sm-4 text-center" >수정하기</button>
 					<div class="col-sm-4"></div>
 					<button type="button" id="cancelBtn" onclick="history.go(-1);"
@@ -120,7 +120,14 @@
 <!-- AdminLTE App -->
 <script src="<%=request.getContextPath() %>/resources/bootstrap/dist/js/adminlte.min.js"></script>
 
-<script> // 사진이미지 불러오기
+<script> // 회원 수정 submit
+function modify_go(){
+// 	alert("modify btn click");
+	var form=$('form[role="form"]');
+	form.submit();
+}
+</script>
+<script> // 사진 미리보기
 var imageURL = "getPicture.do?picture=${member.picture}";
 $('div#pictureView').css({'background-image':'url('+imageURL+')',
 						  'background-position':'center',
@@ -128,13 +135,13 @@ $('div#pictureView').css({'background-image':'url('+imageURL+')',
 						  'background-repeat':'no-repeat'
 						});
 </script>
-<script>
+<script> // 사진 변경
 $('input#inputFile').on('change',function(event){
 // 	alert('file change');
 	
 	var fileFormat = this.value.substr(this.value.lastIndexOf(".")+1).toUpperCase();
 	// 이미지 확장자 jpg 확인
-	if(fileFormat!="JPG"){
+	if(fileFormat!="JPG" && fileFormat!="JPEG"){
 		alert("이미지는 jpg 형식만 가능합니다.");
 		return;
 	}
@@ -143,6 +150,27 @@ $('input#inputFile').on('change',function(event){
 		alert("사진 용량은 1MB 이하만 가능합니다.");
 		return;
 	}
+	
+	document.getElementById('inputFileName').value = this.files[0].name;
+	if(this.files && this.files[0]){
+		
+		var reader = new FileReader();
+		
+		reader.onload = function(e){
+			// 이미지 미리보기
+			$('div#pictureView').css({
+				'background-image':'url('+e.target.result+')',
+				'background-position':'center',
+				'background-size':'cover',
+				'background-repeat':'no-repeat'
+			});
+		}
+		
+		reader.readAsDataURL(this.files[0]);
+	}
+	
+	// 이미지 변경 확인
+	$('input[name="uploadPicture"]').val(this.files[0].name);
 });
 </script>
 </body>
