@@ -70,7 +70,7 @@
 			          		
 			          		
 			          		<div class="col-sm-3 text-center">
-			          			<button type="button" id="modifyBtn" class="btn btn-warning ">수 정</button>
+			          			<button type="button" id="modifyBtn" onclick="location.href='modifyForm.do?id=${member.id }';" class="btn btn-warning ">수 정</button>
 			          		</div>
 		          		
 			          		<div class="col-sm-3 text-center">
@@ -101,5 +101,15 @@
 <script src="<%=request.getContextPath() %>/resources/bootstrap/dist/js/adminlte.min.js"></script>
 <!-- common -->
 <script src="<%=request.getContextPath() %>/resources/js/common.js" ></script>
+
+<script> // 사진이미지 불러오기
+var imageURL = "getPicture.do?picture=${member.picture}";
+$('div#pictureView').css({'background-image':'url('+imageURL+')',
+						  'background-position':'center',
+						  'background-size':'cover',
+						  'background-repeat':'no-repeat'
+						});
+$('input').css('border','none').prop('readonly',true);
+</script>
 </body>
 </html>
