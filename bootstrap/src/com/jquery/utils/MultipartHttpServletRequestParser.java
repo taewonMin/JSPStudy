@@ -24,6 +24,11 @@ public class MultipartHttpServletRequestParser {
 	Map<String, String[]> paramString = new HashMap<String, String[]>();
 	Map<String, List<FileItem>> paramFile = new HashMap<String, List<FileItem>>();
 	
+	public MultipartHttpServletRequestParser(HttpServletRequest request) 
+			throws NotMultipartFormDataException, UnsupportedEncodingException, FileUploadException {
+		this(request, MEMORY_THRESHOLD, MAX_FILE_SIZE, MAX_REQUEST_SIZE);
+	}
+	
 	public MultipartHttpServletRequestParser(HttpServletRequest request, int memory_threshold, int max_file_size, int max_request_size)
 			throws NotMultipartFormDataException, UnsupportedEncodingException, FileUploadException {
 		
