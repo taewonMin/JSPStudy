@@ -82,7 +82,7 @@
 		               		for(int i=0; i<memberList.size(); i++){
 		               			pageContext.setAttribute("member", memberList.get(i));
 		               	%>
-		               	<tr>
+		               	<tr onclick="OpenWindow('detail.do?id=${member.id}','','800','900');" style="cursor: pointer;">
 		               		<td>${member.id }</td>
 		               		<td>${member.pwd }</td>
 		               		<td>${member.email }</td>
@@ -146,7 +146,7 @@
 <script src="<%=request.getContextPath() %>/resources/bootstrap/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- AdminLTE App -->
 <script src="<%=request.getContextPath() %>/resources/bootstrap/dist/js/adminlte.min.js"></script>
-
+<!-- Common.js -->
 <script src="<%=request.getContextPath() %>/resources/js/common.js"></script>
 
 <form id="jobForm">
@@ -175,6 +175,5 @@ function searchList_go(page,url){
    jobForm.submit();
 }
 </script>
-
 </body>
 </html>

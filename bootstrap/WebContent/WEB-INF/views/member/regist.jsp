@@ -148,7 +148,8 @@
 <script src="<%=request.getContextPath() %>/resources/bootstrap/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- AdminLTE App -->
 <script src="<%=request.getContextPath() %>/resources/bootstrap/dist/js/adminlte.min.js"></script>
-
+<!-- Common.js -->
+<script src="<%=request.getContextPath() %>/resources/js/common.js"></script>
 
 <form role="imageForm" action="upload/picture.do" method="post" enctype="multipart/form-data">
 	<input id="inputFile" name="pictureFile" type="file" class="form-control" style="display:none;">
