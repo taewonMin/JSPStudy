@@ -22,19 +22,16 @@ public class NoticeListHandler implements CommandHandler {
 
 	@Override
 	public String process(HttpServletRequest request, HttpServletResponse response) throws Exception {
+			
 		String url = "/notice/list.jsp";
 
+		// 입력
 		SearchCriteria cri = new SearchCriteria();
 		
 		String page = request.getParameter("page");
 		String perPageNum = request.getParameter("perPageNum");
 		String searchType = request.getParameter("searchType");
 		String keyword = request.getParameter("keyword");
-		
-		System.out.println(page);
-		System.out.println(perPageNum);
-		System.out.println(searchType);
-		System.out.println(keyword);
 		
 		cri.setPage(page);
 		cri.setPerPageNum(perPageNum);
