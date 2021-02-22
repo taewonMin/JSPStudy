@@ -48,8 +48,7 @@ public class MemberDAOImpl implements MemberDAO {
 
 	@Override
 	public void deleteMember(SqlSession session, String id) throws SQLException {
-		// TODO Auto-generated method stub
-		
+		 session.update("Member-Mapper.deleteMember",id);
 	}
 
 	@Override
