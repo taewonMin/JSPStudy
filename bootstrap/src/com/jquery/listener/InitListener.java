@@ -1,6 +1,7 @@
 package com.jquery.listener;
 
 import java.io.File;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.Map;
 
@@ -31,6 +32,7 @@ public class InitListener implements ServletContextListener {
 		if (beanConfigXml == null)
 			return;
 
+		// XML문서를 Document객체로 변환
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		try {
 			DocumentBuilder documentBuilder = factory.newDocumentBuilder();
@@ -38,23 +40,29 @@ public class InitListener implements ServletContextListener {
 			Element root = document.getDocumentElement();
 			NodeList beans = root.getElementsByTagName("bean"); // <beans> <bean id="identify" class="class Type"
 																// ></bean> </beans>
-
+			
 			Map<String, Object> applicationContext = ApplicationContext.getApplicationContext(); // application context
 																									// map
 
 			for (int i = 0; i < beans.getLength(); i++) {
 
-				// System.out.println(beans.item(i).getNodeName());
+//				System.out.println(beans.item(i).getNodeName());
 
 				Node bean = beans.item(i);
 				if (bean.getNodeType() == Node.ELEMENT_NODE) {
 					Element ele = (Element) bean;
 					String id = ele.getAttribute("id");
 					String classType = ele.getAttribute("class");
-
+					
 					// map instance put
 					Class<?> cls = Class.forName(classType);
-					Object targetObj = cls.newInstance();
+
+					// 클래스 생성자 접근(싱글톤 파괴됨)
+					Constructor constructor = cls.getDeclaredConstructors()[0];
+					constructor.setAccessible(true);
+					Object targetObj = constructor.newInstance();
+					
+//					Object targetObj = cls.newInstance();
 					
 					applicationContext.put(id, targetObj);
 					
@@ -81,12 +89,13 @@ public class InitListener implements ServletContextListener {
 							Method[] methods;
 
 							methods = Class.forName(eleBean.getAttribute("class")).getMethods();
-
+							
 							for (Method method : methods) {
 								// 의존성 여부 확인
 								if (method.getName().equals(setMethodName)) {
-									//System.out.println(setMethodName+" : "+method.getName());
+									System.out.println(setMethodName+" : "+method.getName());
 									
+									// invoke(메서드를 호출할 객체, 전달할 파라미터 값)
 									method.invoke(applicationContext.get(eleBean.getAttribute("id")),applicationContext.get(ref));
 									
 									System.out.println("[invoke]"+applicationContext.get(eleBean.getAttribute("id"))+":"+applicationContext.get(ref));
