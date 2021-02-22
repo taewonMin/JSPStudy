@@ -117,19 +117,12 @@
 							);"><i class="fas fa-angle-left"></i></a>
 						</li>
 						
-						<% 	PageMaker pageMaker = (PageMaker) request.getAttribute("pageMaker");
-							for(int i=pageMaker.getStartPage(); i<pageMaker.getEndPage()+1; i++){
-								pageContext.setAttribute("pageNum", i);
-						%>
-						
-						<li class="page-item ${pageMaker.cri.page == pageNum?'active':''}">
-							<a class="page-link" href="javascript:searchList_go(${pageNum});" >${pageNum }
-							</a>
-						</li>
-						
-						<%	
-							}
-						%>
+						<c:forEach var="pageNum" begin="${pageMaker.startPage }" end="${pageMaker.endPage }">
+							<li class="page-item ${pageMaker.cri.page == pageNum?'active':''}">
+								<a class="page-link" href="javascript:searchList_go(${pageNum});" >${pageNum }
+								</a>
+							</li>
+						</c:forEach>
 						
 						<li class="page-item">
 							<a class="page-link" href="javascript:searchList_go(

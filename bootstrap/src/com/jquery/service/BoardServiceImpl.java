@@ -26,11 +26,11 @@ public class BoardServiceImpl implements BoardService {
 
 	private BoardServiceImpl() {
 	}
-
+	
 	public static BoardServiceImpl getInstance() {
 		return instance;
 	}
-
+	
 	private SqlSessionFactory sqlSessionFactory = OracleIBatisSqlSessionFactory.getSqlSessionFactory();
 	public void setSessionFactory(SqlSessionFactory sqlSessionFactory) {
 		this.sqlSessionFactory = sqlSessionFactory;

@@ -63,7 +63,7 @@ public class InitListener implements ServletContextListener {
 					Object targetObj = constructor.newInstance();
 					constructor.setAccessible(false);
 					
-//					Object targetObj = cls.newInstance();.
+//					Object targetObj = cls.newInstance();
 					
 					applicationContext.put(id, targetObj);
 					
