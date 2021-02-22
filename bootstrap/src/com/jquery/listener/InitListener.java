@@ -61,8 +61,9 @@ public class InitListener implements ServletContextListener {
 					Constructor constructor = cls.getDeclaredConstructors()[0];
 					constructor.setAccessible(true);
 					Object targetObj = constructor.newInstance();
+					constructor.setAccessible(false);
 					
-//					Object targetObj = cls.newInstance();
+//					Object targetObj = cls.newInstance();.
 					
 					applicationContext.put(id, targetObj);
 					

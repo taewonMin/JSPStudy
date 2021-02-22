@@ -6,10 +6,9 @@
     pageEncoding="UTF-8"%>
 <%@ page trimDirectiveWhitespaces="true" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%
-	SearchCriteria cri = ((PageMaker)request.getAttribute("pageMaker")).getCri();
-	pageContext.setAttribute("cri", cri);
-%>
+
+<c:set var="cri" value="${pageMaker.cri }"/>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -87,27 +86,20 @@
 						<th style="width:10%;">조회수</th>
 					</tr>				
 					
-					<% List<NoticeVO> noticeList = (List<NoticeVO>) request.getAttribute("noticeList");
-						for(NoticeVO notice : noticeList){
-							pageContext.setAttribute("notice", notice);
-					%>
-					
-					<tr style='font-size:0.85em;'>
-						<td>${notice.nno }</td>
-						<td style="text-align:left;max-width: 100px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
-							<a href="javascript:initPageParam();OpenWindow('detail.do?nno=${notice.nno }','상세보기',800,700);">
-								<span class="col-sm-12 ">${notice.title }
-								</span>
-							</a>
-						</td>
-						<td>${notice.writer }</td>
-						<td>${notice.regdate }</td>
-						<td><span class="badge bg-red">${notice.viewcnt }</span></td>
-					</tr>
-					
-					<%
-						}
-					%>
+					<c:forEach items="${noticeList }" var="notice">
+						<tr style='font-size:0.85em;'>
+							<td>${notice.nno }</td>
+							<td style="text-align:left;max-width: 100px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
+								<a href="javascript:initPageParam();OpenWindow('detail.do?nno=${notice.nno }','상세보기',800,700);">
+									<span class="col-sm-12 ">${notice.title }
+									</span>
+								</a>
+							</td>
+							<td>${notice.writer }</td>
+							<td>${notice.regdate }</td>
+							<td><span class="badge bg-red">${notice.viewcnt }</span></td>
+						</tr>
+					</c:forEach>
 										
 				</table>				
 			</div>
@@ -176,11 +168,6 @@
 <script src="<%=request.getContextPath() %>/resources/bootstrap/dist/js/adminlte.min.js"></script>
 <!-- handlebars -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.6/handlebars.min.js" ></script>
-
-<!-- jquery cookie -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
-
-
 <!-- common -->
 <script src="<%=request.getContextPath() %>/resources/js/common.js?v=1"></script>
 

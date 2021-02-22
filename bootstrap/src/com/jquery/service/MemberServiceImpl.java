@@ -19,14 +19,14 @@ import com.jquery.mybatis.OracleIBatisSqlSessionFactory;
 
 public class MemberServiceImpl implements MemberService {
 
-	private SqlSessionFactory sqlSessionFactory;
+	private static SqlSessionFactory sqlSessionFactory;
 	public void setSqlSessionFactory(SqlSessionFactory sqlSessionFactory) {
-		this.sqlSessionFactory = sqlSessionFactory;
+		MemberServiceImpl.sqlSessionFactory = sqlSessionFactory;
 	}
 	
-	private MemberDAO memberDAO;
+	private static MemberDAO memberDAO;
 	public void setMemberDAO(MemberDAO memberDAO) {
-		this.memberDAO = memberDAO;
+		MemberServiceImpl.memberDAO = memberDAO;
 	}
 	
 	@Override
