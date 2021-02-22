@@ -1,3 +1,7 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ page trimDirectiveWhitespaces="true" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <!--
 This is a starter template page. Use this page to start your new project from
@@ -26,10 +30,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- Left navbar links -->
     <ul class="navbar-nav main-menu-list">
     	<!-- main menu list -->
-    	
-    	
-    	
-    	
+    	<c:forEach items="${menuList }" var="menu">
+    		<li class="nav-item d-none d-sm-inline-block">
+				<a href="javascript:subMenu('${menu.mcode}');goPage('${menu.murl}', '${menu.mcode}');"
+					onclick="" class="nav-link">${menu.mname}</a>
+			</li>
+    	</c:forEach>
     </ul>
 
     <!-- SEARCH FORM -->
@@ -216,17 +222,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <!-- handlebars -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.6/handlebars.min.js"></script>
 
-<script type="text/x-handlebars-template" id="mainMenu-list-template">
-{{#each .}}
-
-<li class="nav-item d-none d-sm-inline-block mainMenu">
-	<a href="javascript:subMenu('{{mcode}}');goPage('{{murl}}', '{{mcode}}');initPageParam();"
-		onclick="" class="nav-link">{{mname}}</a>
-</li>
-
-{{/each}}
-</script>
-
 <script type="text/x-handlebars-template" id="subMenu-list-template">
 {{#each .}}
 
@@ -239,5 +234,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 {{/each}}
 </script>
+
+<script>
+goPage('${menu.murl}','${menu.mcode}');
+subMenu('${menu.mcode}'.substring(0,3)+"0000");
+</script>
+
 </body>
 </html>

@@ -5,11 +5,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ page trimDirectiveWhitespaces="true" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<% 
-	SearchCriteria cri = ((PageMaker)request.getAttribute("pageMaker")).getCri();
-	pageContext.setAttribute("cri", cri); 
-%>
+<c:set var="cri" value="${pageMaker.cri }" />
 
 <!DOCTYPE html>
 <html>
@@ -78,20 +76,17 @@
 		                	<th>전화번호</th>
 		                	<th>등록날짜</th> <!-- yyyy-MM-dd  -->
 		               	</tr>
-		               	<% List<MemberVO> memberList = (List<MemberVO>)request.getAttribute("memberList");
-		               		for(int i=0; i<memberList.size(); i++){
-		               			pageContext.setAttribute("member", memberList.get(i));
-		               	%>
-		               	<tr onclick="OpenWindow('detail.do?id=${member.id}','','800','900');" style="cursor: pointer;">
-		               		<td>${member.id }</td>
-		               		<td>${member.pwd }</td>
-		               		<td>${member.email }</td>
-		               		<td>${member.phone }</td>
-		               		<td>${member.regdate }</td>
-		               	</tr>
-		               	<%		
-		               		}
-		               	%>
+		               	
+		               	<c:forEach items="${memberList }" var="member">
+			               	<tr onclick="OpenWindow('detail.do?id=${member.id}','','800','900');" style="cursor: pointer;">
+			               		<td>${member.id }</td>
+			               		<td>${member.pwd }</td>
+			               		<td>${member.email }</td>
+			               		<td>${member.phone }</td>
+			               		<td>${member.regdate }</td>
+			               	</tr>
+		               	</c:forEach>
+		               	
 		    		</table>
     		   </div> <!-- col-sm-12 -->
     		 </div> <!-- row -->

@@ -1,6 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ page trimDirectiveWhitespaces="true" %>
-<script>
-	location.href='<%= request.getContextPath() %>/common/loginForm.do';
-</script>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+<c:if test="${sessionScope.loginUser == null }">
+	<script>
+		location.href='<%= request.getContextPath() %>/common/loginForm.do';
+	</script>
+</c:if>
+
