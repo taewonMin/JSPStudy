@@ -53,9 +53,6 @@ public class FrontServlet extends HttpServlet {
 		CommandHandler handler = null;
 		String view = null;
 		
-		response.setContentType("text/html;charset=utf-8");
-		PrintWriter out = response.getWriter();
-		
 		if(handlerMapper != null) {
 			handler = handlerMapper.getHandler(command);
 			if(handler!=null) { // 올바른 요청
@@ -69,6 +66,8 @@ public class FrontServlet extends HttpServlet {
 					
 				} catch (Exception e) {
 					e.printStackTrace();
+					response.setContentType("text/html;charset=utf-8");
+					PrintWriter out = response.getWriter();
 					out.println("<script>");
 					out.println("alert('서비스 장애가 발생했습니다.\n잠시 후에 이용바랍니다.');");
 					out.println("history.go(-1);");
@@ -77,12 +76,16 @@ public class FrontServlet extends HttpServlet {
 				
 			}else { // 잘못된 요청
 				System.out.println("!! not found : " + command);
+				response.setContentType("text/html;charset=utf-8");
+				PrintWriter out = response.getWriter();
 				out.println("<script>");
 				out.println("alert('잘못된 요청입니다. 똑바로하세요.');");
 				out.println("history.go(-1);");
 				out.println("</script>");
 			}
 		}else {
+			response.setContentType("text/html;charset=utf-8");
+			PrintWriter out = response.getWriter();
 			out.println("<script>");
 			out.println("alert('서비스 장애가 발생했습니다.\n잠시 후에 이용바랍니다.');");
 			out.println("history.go(-1);");

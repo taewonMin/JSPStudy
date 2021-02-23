@@ -11,6 +11,7 @@ import org.junit.Test;
 import com.jquery.dao.MenuDAO;
 import com.jquery.dao.MenuDAOImpl;
 import com.jquery.dto.MenuVO;
+import com.jquery.mybatis.OracleMyBatisSqlSessionFactory;
 
 
 public class TestMenuDAOImpl {
@@ -20,6 +21,7 @@ public class TestMenuDAOImpl {
 	
 	@Before
 	public void init() {
+		session = new OracleMyBatisSqlSessionFactory().openSession(false);
 		menuDAO = new MenuDAOImpl();
 	}
 	

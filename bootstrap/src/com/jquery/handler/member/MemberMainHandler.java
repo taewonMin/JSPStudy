@@ -9,7 +9,9 @@ public class MemberMainHandler implements CommandHandler {
 
 	@Override
 	public String process(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		return null;
+		String url = "member/main";
+		
+		return url;
 	}
 
 }
