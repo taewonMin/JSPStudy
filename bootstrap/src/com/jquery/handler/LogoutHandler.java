@@ -7,11 +7,6 @@ import javax.servlet.http.HttpSession;
 public class LogoutHandler implements CommandHandler {
 
 	@Override
-	public boolean isRedirect(HttpServletRequest requset) {
-		return true;
-	}
-
-	@Override
 	public String process(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String url="/";
 		

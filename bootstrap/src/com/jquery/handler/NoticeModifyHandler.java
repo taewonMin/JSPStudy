@@ -20,16 +20,11 @@ import com.jquery.utils.ServletFileUploadBuilder;
 
 public class NoticeModifyHandler implements CommandHandler {
 
-	private NoticeService noticeService = NoticeServiceImpl.getInstance();
+	private NoticeService noticeService;
 	public void setNoticeService(NoticeService noticeService) {
 		this.noticeService = noticeService;
 	}
 	
-	@Override
-	public boolean isRedirect(HttpServletRequest requset) {
-		return false;
-	}
-
 	@Override
 	public String process(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		if(request.getMethod().equals("GET")) {

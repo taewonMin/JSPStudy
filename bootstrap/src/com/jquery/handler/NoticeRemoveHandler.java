@@ -15,14 +15,9 @@ import com.jquery.service.NoticeServiceImpl;
 
 public class NoticeRemoveHandler implements CommandHandler {
 	
-	private NoticeService noticeService = NoticeServiceImpl.getInstance();
+	private NoticeService noticeService;
 	public void setNoticeService(NoticeService noticeService) {
 		this.noticeService = noticeService;
-	}
-	
-	@Override
-	public boolean isRedirect(HttpServletRequest request) {
-		return false;
 	}
 
 	@Override

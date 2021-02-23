@@ -12,11 +12,9 @@ import com.jquery.utils.JsonResolver;
 
 public class SubMenuHandler implements CommandHandler {
 
-	private MenuService service = new MenuServiceImpl();
-	
-	@Override
-	public boolean isRedirect(HttpServletRequest req) {
-		return false;
+	private MenuService menuService;
+	public void setMenuService(MenuService menuService) {
+		this.menuService = menuService;
 	}
 
 	@Override
@@ -26,7 +24,7 @@ public class SubMenuHandler implements CommandHandler {
 		List<MenuVO> subMenu = null;
 		
 		try {
-			subMenu = service.getSubMenuList(mCode);
+			subMenu = menuService.getSubMenuList(mCode);
 			
 			JsonResolver.view(response, subMenu);
 		} catch(Exception e) {

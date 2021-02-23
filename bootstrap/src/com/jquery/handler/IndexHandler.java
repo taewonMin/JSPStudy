@@ -12,16 +12,11 @@ import com.jquery.service.MenuServiceImpl;
 
 public class IndexHandler implements CommandHandler {
 
-	private MenuService menuService = new MenuServiceImpl();
+	private MenuService menuService;
 	public void setMenuService(MenuService menuService) {
 		this.menuService = menuService;
 	}
 	
-	@Override
-	public boolean isRedirect(HttpServletRequest requset) {
-		return false;
-	}
-
 	@Override
 	public String process(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String url = "/WEB-INF/views/common/indexPage.jsp";

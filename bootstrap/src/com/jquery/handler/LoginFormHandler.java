@@ -6,12 +6,6 @@ import javax.servlet.http.HttpServletResponse;
 public class LoginFormHandler implements CommandHandler {
 
 	@Override
-	public boolean isRedirect(HttpServletRequest requset) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
 	public String process(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String url = "/WEB-INF/views/common/loginForm.jsp";
 		

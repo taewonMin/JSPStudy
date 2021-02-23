@@ -14,16 +14,11 @@ import com.jquery.utils.JsonResolver;
 
 public class BoardReplyListHandler implements CommandHandler {
 
-	private ReplyService replyService = new ReplyServiceImpl();	
+	private ReplyService replyService;	
 	public void setReplyService(ReplyService replyService) {
 		this.replyService = replyService;
 	}
 	
-	@Override
-	public boolean isRedirect(HttpServletRequest request) {
-		return false;
-	}
-
 	@Override
 	public String process(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		// 1. 입력

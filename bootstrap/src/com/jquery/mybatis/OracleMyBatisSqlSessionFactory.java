@@ -11,15 +11,12 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.apache.ibatis.session.TransactionIsolationLevel;
 
-public class OracleIBatisSqlSessionFactory implements SqlSessionFactory{
+public class OracleMyBatisSqlSessionFactory implements SqlSessionFactory{
 	
-	private static OracleIBatisSqlSessionFactory instance = new OracleIBatisSqlSessionFactory();
-	private OracleIBatisSqlSessionFactory() {
-	}
 	
-	private static SqlSessionFactory sqlSessionFactory;
+	private SqlSessionFactory sqlSessionFactory;
 	
-	static {
+	{
 		
 		String config="com/jquery/mybatis/sqlConfig/sqlConfig.xml";
 		
@@ -37,13 +34,6 @@ public class OracleIBatisSqlSessionFactory implements SqlSessionFactory{
 		
 	}
 	
-	
-	
-	
-	public static SqlSessionFactory getSqlSessionFactory() {
-		return instance;
-	}
-
 	@Override
 	public Configuration getConfiguration() {		
 		return sqlSessionFactory.getConfiguration();

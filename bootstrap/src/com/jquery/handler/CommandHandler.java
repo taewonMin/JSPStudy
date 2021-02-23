@@ -9,14 +9,5 @@ public interface CommandHandler {
 	 * @param req
 	 * @return
 	 */
-	public boolean isRedirect(HttpServletRequest requset);
-	
-	/**
-	 * 요청한 내용을 실제 처리하는 메서드
-	 * @param req
-	 * @param res
-	 * @return
-	 * @throws Exception
-	 */
 	public String process(HttpServletRequest request, HttpServletResponse response) throws Exception;
 }

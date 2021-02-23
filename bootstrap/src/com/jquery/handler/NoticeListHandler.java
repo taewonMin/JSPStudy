@@ -13,13 +13,11 @@ import com.jquery.utils.JsonResolver;
 
 public class NoticeListHandler implements CommandHandler {
 
-	private NoticeService noticeService = NoticeServiceImpl.getInstance();
-	
-	@Override
-	public boolean isRedirect(HttpServletRequest requset) {
-		return false;
+	private NoticeService noticeService;
+	public void setNoticeService(NoticeService noticeService) {
+		this.noticeService = noticeService;
 	}
-
+	
 	@Override
 	public String process(HttpServletRequest request, HttpServletResponse response) throws Exception {
 			

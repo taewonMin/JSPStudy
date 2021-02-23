@@ -16,23 +16,10 @@ import com.jquery.dao.NoticeDAO;
 import com.jquery.dao.NoticeDAOImpl;
 import com.jquery.dto.NoticeAttachVO;
 import com.jquery.dto.NoticeVO;
-import com.jquery.mybatis.OracleIBatisSqlSessionFactory;
 
 public class NoticeServiceImpl implements NoticeService {
 
-	private static NoticeServiceImpl instance; 
-
-	private NoticeServiceImpl() {
-	}
-
-	public static NoticeServiceImpl getInstance() {
-		if(instance == null) {
-			instance = new NoticeServiceImpl();
-		}
-		return instance;
-	}
-
-	private SqlSessionFactory sqlSessionFactory = OracleIBatisSqlSessionFactory.getSqlSessionFactory();
+	private SqlSessionFactory sqlSessionFactory;
 	public void setSessionFactory(SqlSessionFactory sqlSessionFactory) {
 		this.sqlSessionFactory = sqlSessionFactory;
 	}

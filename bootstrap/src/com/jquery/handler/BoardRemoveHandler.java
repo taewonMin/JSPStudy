@@ -15,15 +15,9 @@ import com.jquery.service.BoardServiceImpl;
 
 public class BoardRemoveHandler implements CommandHandler {
 	
-	private BoardService boardService=BoardServiceImpl.getInstance();
+	private BoardService boardService;
 	public void setBoardService(BoardService boardService) {
 		this.boardService = boardService;
-	}
-	
-	@Override
-	public boolean isRedirect(HttpServletRequest request) {
-		// TODO Auto-generated method stub
-		return false;
 	}
 
 	@Override

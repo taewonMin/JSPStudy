@@ -7,18 +7,16 @@ import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 
 import com.jquery.dao.MenuDAO;
-import com.jquery.dao.MenuDAOImpl;
 import com.jquery.dto.MenuVO;
-import com.jquery.mybatis.OracleIBatisSqlSessionFactory;
 
 public class MenuServiceImpl implements MenuService {
 
-	private SqlSessionFactory sqlSessionFactory = OracleIBatisSqlSessionFactory.getSqlSessionFactory();
+	private SqlSessionFactory sqlSessionFactory;
 	public void setSqlSessionFactory(SqlSessionFactory sqlSessionFactory) {
 		this.sqlSessionFactory = sqlSessionFactory;
 	}
 	
-	private MenuDAO menuDAO = new MenuDAOImpl();
+	private MenuDAO menuDAO;
 	public void setMenuDAO(MenuDAO menuDAO) {
 		this.menuDAO = menuDAO;
 	}

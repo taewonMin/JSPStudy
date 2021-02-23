@@ -18,14 +18,9 @@ import com.jquery.utils.MultipartHttpServletRequestParser;
 
 public class MemberModifyHandler implements CommandHandler {
 
-	private MemberService memberService = new MemberServiceImpl();
+	private MemberService memberService;
 	public void setMemberService(MemberService memberService) {
 		this.memberService = memberService;
-	}
-	
-	@Override
-	public boolean isRedirect(HttpServletRequest requset) {
-		return false;
 	}
 
 	private static final int MEMORY_THRESHOLD = 1024 * 500; // 500KB

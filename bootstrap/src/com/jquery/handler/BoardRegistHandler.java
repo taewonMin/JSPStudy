@@ -21,16 +21,11 @@ import com.jquery.utils.ServletFileUploadBuilder;
 
 public class BoardRegistHandler implements CommandHandler {
 
-	private BoardService boardService = BoardServiceImpl.getInstance();
+	private BoardService boardService;
 	public void setBoardService(BoardService boardService) {
 		this.boardService = boardService;
 	}
 	
-	@Override
-	public boolean isRedirect(HttpServletRequest req) {
-		return false;
-	}
-
 	@Override
 	public String process(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		

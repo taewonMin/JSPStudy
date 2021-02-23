@@ -13,13 +13,11 @@ import com.jquery.utils.JsonResolver;
 
 public class BoardListHandler implements CommandHandler {
 
-	private BoardService boardService = BoardServiceImpl.getInstance();
-	
-	@Override
-	public boolean isRedirect(HttpServletRequest req) {
-		return false;
+	private BoardService boardService;
+	public void setBoardService(BoardService boardService) {
+		this.boardService = boardService;
 	}
-
+	
 	@Override
 	public String process(HttpServletRequest request, HttpServletResponse response) throws Exception {
 //		String page = request.getParameter("page");

@@ -13,11 +13,6 @@ import com.jquery.utils.GetUploadPath;
 public class SummernoteDeleteImgHandler implements CommandHandler {
 
 	@Override
-	public boolean isRedirect(HttpServletRequest req) {
-		return false;
-	}
-
-	@Override
 	public String process(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		
 		ObjectMapper mapper = new ObjectMapper();

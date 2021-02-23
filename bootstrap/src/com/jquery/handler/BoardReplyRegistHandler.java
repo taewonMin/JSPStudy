@@ -15,14 +15,9 @@ import com.jquery.service.ReplyServiceImpl;
 
 public class BoardReplyRegistHandler implements CommandHandler {
 
-	private ReplyService replyService = new ReplyServiceImpl();
+	private ReplyService replyService;
 	public void setReplyService(ReplyService replyService) {
 		this.replyService = replyService;
-	}
-	
-	@Override
-	public boolean isRedirect(HttpServletRequest requset) {
-		return false;
 	}
 
 	@Override

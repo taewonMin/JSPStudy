@@ -6,11 +6,6 @@ import javax.servlet.http.HttpServletResponse;
 public class MemberRegistFormHandler implements CommandHandler {
 
 	@Override
-	public boolean isRedirect(HttpServletRequest requset) {
-		return false;
-	}
-
-	@Override
 	public String process(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String url = "/WEB-INF/views/member/regist.jsp";
 		

@@ -13,18 +13,15 @@ import com.jquery.command.SearchCriteria;
 import com.jquery.dao.ReplyDAO;
 import com.jquery.dao.ReplyDAOImpl;
 import com.jquery.dto.ReplyVO;
-import com.jquery.mybatis.OracleIBatisSqlSessionFactory;
 
 public class ReplyServiceImpl implements ReplyService {
 
-	private SqlSessionFactory sqlSessionFactory = OracleIBatisSqlSessionFactory.getSqlSessionFactory();
-
+	private SqlSessionFactory sqlSessionFactory;
 	public void setSqlSessionFactory(SqlSessionFactory sqlSessionFactory) {
 		this.sqlSessionFactory = sqlSessionFactory;
 	}
 
 	private ReplyDAO replyDAO=new ReplyDAOImpl();
-
 	public void setReplyDAO(ReplyDAO replyDAO) {
 		this.replyDAO = replyDAO;
 	}

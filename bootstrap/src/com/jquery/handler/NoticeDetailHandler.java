@@ -15,14 +15,9 @@ import com.jquery.utils.MakeFileName;
 
 public class NoticeDetailHandler implements CommandHandler {
 
-	private NoticeService noticeService = NoticeServiceImpl.getInstance();
+	private NoticeService noticeService;
 	public void setNoticeService(NoticeService noticeService) {
 		this.noticeService = noticeService;
-	}
-	
-	@Override
-	public boolean isRedirect(HttpServletRequest req) {
-		return false;
 	}
 
 	@Override

@@ -15,16 +15,11 @@ import com.jquery.utils.MakeFileName;
 
 public class BoardDetailHandler implements CommandHandler {
 
-	private BoardService boardService = BoardServiceImpl.getInstance();
+	private BoardService boardService;
 	public void setBoardService(BoardService boardService) {
 		this.boardService = boardService;
 	}
 	
-	@Override
-	public boolean isRedirect(HttpServletRequest req) {
-		return false;
-	}
-
 	@Override
 	public String process(HttpServletRequest req, HttpServletResponse res) throws Exception {
 		//1. parameter 수용

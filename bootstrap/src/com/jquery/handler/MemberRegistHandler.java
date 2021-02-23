@@ -12,16 +12,11 @@ import com.jquery.service.MemberServiceImpl;
 
 public class MemberRegistHandler implements CommandHandler {
 
-	private MemberService memberService = new MemberServiceImpl();
+	private MemberService memberService;
 	public void setMemberService(MemberService memberService) {
 		this.memberService = memberService;
 	}
 	
-	@Override
-	public boolean isRedirect(HttpServletRequest requset) {
-		return false;
-	}
-
 	@Override
 	public String process(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String url = null;

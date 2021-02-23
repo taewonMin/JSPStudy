@@ -26,9 +26,9 @@ public class InitListener implements ServletContextListener {
 		ServletContext ctx = ctxEvent.getServletContext();
 
 		String beanConfigXml = ctx.getInitParameter("contextConfigLocation");
-		beanConfigXml = ctx.getRealPath("/")
+		beanConfigXml = ctx.getRealPath("")
 				+ beanConfigXml.replace("classpath:", "/WEB-INF/classes/").replace("/", File.separator);
-
+		
 		if (beanConfigXml == null)
 			return;
 
@@ -58,12 +58,12 @@ public class InitListener implements ServletContextListener {
 					Class<?> cls = Class.forName(classType);
 
 					// 클래스 생성자 접근(싱글톤 파괴됨)
-					Constructor constructor = cls.getDeclaredConstructors()[0];
-					constructor.setAccessible(true);
-					Object targetObj = constructor.newInstance();
-					constructor.setAccessible(false);
+//					Constructor constructor = cls.getDeclaredConstructors()[0];
+//					constructor.setAccessible(true);
+//					Object targetObj = constructor.newInstance();
+//					constructor.setAccessible(false);
 					
-//					Object targetObj = cls.newInstance();
+					Object targetObj = cls.newInstance();
 					
 					applicationContext.put(id, targetObj);
 					

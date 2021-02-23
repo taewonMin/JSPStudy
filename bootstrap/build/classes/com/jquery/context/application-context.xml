@@ -2,15 +2,21 @@
 
 <beans>
 	<!-- dataSource -->
-	<bean id="sqlSessionFactory" class="com.jquery.mybatis.OracleIBatisSqlSessionFactory" />
+	<bean id="sqlSessionFactory" class="com.jquery.mybatis.OracleMyBatisSqlSessionFactory" />
 	
 	<!-- Repository Layer -->
 	<bean id="memberDAO" class="com.jquery.dao.MemberDAOImpl" />
 	<bean id="boardDAO" class="com.jquery.dao.BoardDAOImpl" />
 	<bean id="attachDAO" class="com.jquery.dao.AttachDAOImpl" />
 	<bean id="replyDAO" class="com.jquery.dao.ReplyDAOImpl" />
+	<bean id="menuDAO" class="com.jquery.dao.MenuDAOImpl" />
 	
 	<!-- Service layer -->
+	<bean id="menuService" class="com.jquery.service.MenuServiceImpl">
+		<property name="sqlSessionFactory" ref-value="sqlSessionFactory" />
+		<property name="menuDAO" ref-value="menuDAO" />
+	</bean>
+	
 	<bean id="memberService" class="com.jquery.service.MemberServiceImpl">
 		<property name="sqlSessionFactory" ref-value="sqlSessionFactory" />
 		<property name="memberDAO" ref-value="memberDAO"/>
@@ -22,4 +28,5 @@
 		<property name="replyDAO" ref-value="replyDAO" />
 		<property name="attachDAO" ref-value="attachDAO" />
 	</bean>
+	
 </beans>

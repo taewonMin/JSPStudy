@@ -15,14 +15,9 @@ import com.jquery.utils.JsonResolver;
 
 public class BoardReplyRemoveHandler implements CommandHandler {
 
-	private ReplyService replyService = new ReplyServiceImpl();
+	private ReplyService replyService;
 	public void setReplyService(ReplyService replyService) {
 		this.replyService = replyService;
-	}
-	
-	@Override
-	public boolean isRedirect(HttpServletRequest requset) {
-		return false;
 	}
 
 	@Override

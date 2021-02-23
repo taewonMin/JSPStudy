@@ -18,14 +18,9 @@ import com.jquery.utils.MakeFileName;
 
 public class BoardGetFileHandler implements CommandHandler {
 
-	private BoardService boardService = BoardServiceImpl.getInstance();
+	private BoardService boardService;
 	public void setBoardService(BoardService boardService) {
 		this.boardService = boardService;
-	}
-	
-	@Override
-	public boolean isRedirect(HttpServletRequest requset) {
-		return false;
 	}
 
 	@Override

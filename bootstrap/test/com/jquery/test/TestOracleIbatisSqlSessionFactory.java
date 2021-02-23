@@ -7,7 +7,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.jquery.dto.MenuVO;
-import com.jquery.mybatis.OracleIBatisSqlSessionFactory;
 
 public class TestOracleIbatisSqlSessionFactory {
 
@@ -15,7 +14,6 @@ public class TestOracleIbatisSqlSessionFactory {
 	
 	@Before
 	public void init() {
-		factory = OracleIBatisSqlSessionFactory.getSqlSessionFactory();
 	}
 	
 	@Test

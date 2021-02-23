@@ -14,11 +14,6 @@ import com.jquery.utils.GetUploadPath;
 public class SummernoteGetImgHandler implements CommandHandler {
 
 	@Override
-	public boolean isRedirect(HttpServletRequest req) {
-		return false;
-	}
-
-	@Override
 	public String process(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		
 		// 파일명
