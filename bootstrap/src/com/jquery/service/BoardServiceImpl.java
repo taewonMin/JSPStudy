@@ -22,22 +22,21 @@ import com.jquery.dto.BoardVO;
 public class BoardServiceImpl implements BoardService {
 
 	private SqlSessionFactory sqlSessionFactory;
-	public void setSessionFactory(SqlSessionFactory sqlSessionFactory) {
+	public void setSqlSessionFactory(SqlSessionFactory sqlSessionFactory) {
 		this.sqlSessionFactory = sqlSessionFactory;
 	}
 
-	private BoardDAO boardDAO = new BoardDAOImpl();
+	private BoardDAO boardDAO;
 	public void setBoardDAO(BoardDAO boardDAO) {
 		this.boardDAO = boardDAO;
 	}
 
-	private AttachDAO attachDAO = new AttachDAOImpl();
+	private AttachDAO attachDAO;
 	public void setAttachDAO(AttachDAO attachDAO) {
 		this.attachDAO = attachDAO;
 	}
 
-	private ReplyDAO replyDAO = new ReplyDAOImpl();
-
+	private ReplyDAO replyDAO;
 	public void setReplyDAO(ReplyDAO replyDAO) {
 		this.replyDAO = replyDAO;
 	}

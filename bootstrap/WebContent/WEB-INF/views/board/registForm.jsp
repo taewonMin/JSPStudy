@@ -1,8 +1,8 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ page trimDirectiveWhitespaces="true" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
-<!--
-This is a starter template page. Use this page to start your new project from
-scratch. This page gets rid of all links and provides the needed markup only.
--->
 <html lang="en">
 <head>
   <meta charset="utf-8">
@@ -10,11 +10,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <title>Board | Regist</title>
 
   <!-- Font Awesome Icons -->
-  <link rel="stylesheet" href="/resources/bootstrap/plugins/fontawesome-free/css/all.min.css">
+  <link rel="stylesheet" href="<%=request.getContextPath() %>/resources/bootstrap/plugins/fontawesome-free/css/all.min.css">
   <!-- Theme style -->
-  <link rel="stylesheet" href="/resources/bootstrap/dist/css/adminlte.min.css">
+  <link rel="stylesheet" href="<%=request.getContextPath() %>/resources/bootstrap/dist/css/adminlte.min.css">
   <!-- include summernote css/js -->
-  <link rel="stylesheet" href="/resources/bootstrap/plugins/summernote/summernote.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="<%=request.getContextPath() %>/resources/bootstrap/plugins/summernote/summernote.min.css" rel="stylesheet">
   <!-- Google Font: Source Sans Pro -->
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
   
@@ -54,7 +54,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   </div>
                </div><!--end card-header  -->
                <div class="card-body pad">
-                  <form role="form" method="post" action="regist.html" name="registForm">
+                  <form role="form" method="post" action="regist.do" name="registForm" enctype="multipart/form-data">
                      <div class="form-group">
                         <label for="title">제 목</label> 
                         <input type="text" id="title"
@@ -62,7 +62,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                      </div>                     
                      <div class="form-group">
                         <label for="writer">작성자</label> 
-                        <input type="text" id="writer" name="writer" class="form-control" value="">
+                        <input type="text" id="writer" name="writer" class="form-control" value="${loginUser.id }" readonly="readonly">
                      </div>
                      <div class="form-group">
                         <label for="content">내 용</label>
@@ -94,19 +94,17 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <!-- /.content-wrapper -->
 
 <!-- jQuery -->
-<script src="/resources/bootstrap/plugins/jquery/jquery.min.js"></script>
+<script src="<%=request.getContextPath() %>/resources/bootstrap/plugins/jquery/jquery.min.js"></script>
 <!-- Bootstrap 4 -->
-<script src="/resources/bootstrap/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="<%=request.getContextPath() %>/resources/bootstrap/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- AdminLTE App -->
-<script src="/resources/bootstrap/dist/js/adminlte.min.js"></script>
+<script src="<%=request.getContextPath() %>/resources/bootstrap/dist/js/adminlte.min.js"></script>
 <!-- Summernote -->
-<script src="/resources/bootstrap/plugins/summernote/summernote-bs4.min.js"></script>
-<!-- jquery cookie -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+<script src="<%=request.getContextPath() %>/resources/bootstrap/plugins/summernote/summernote-bs4.min.js"></script>
 <!-- handlebars -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.6/handlebars.min.js" ></script>
 <!-- common -->
-<script src="/resources/js/common.js?v=1" ></script>
+<script src="<%=request.getContextPath() %>/resources/js/common.js?v=1" ></script>
 
 <script>
 
@@ -132,22 +130,7 @@ function submit_go(){
 		}
 	}
 	
-	var formData = new FormData(form);
-	
-	$.ajax({
-		url: '/board/regist.do',
-		data: formData,
-		type:'post',
-		processData:false,
-		contentType:false,
-		success:function(data){
-			window.opener.location.href="/board/list.html";
-			window.close();
-		},
-		error: function(xhr){
-			alert("시스템 장애로 인해 글등록이 불가합니다.");
-		}
-	});
+	form.submit();
 }
 </script>
 

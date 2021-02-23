@@ -71,9 +71,13 @@ public class MultipartHttpServletRequestParser {
 	
 	public FileItem[] getFileItems(String paramName) {
 		List<FileItem> items = paramFile.get(paramName);
-		FileItem[] files = new FileItem[items.size()];
-		items.toArray(files);
-		return files;
+		if(items == null) {
+			return null;
+		}else {
+			FileItem[] files = new FileItem[items.size()];
+			items.toArray(files);
+			return files;
+		}
 	}
 	
 	public String[] getParameterNames() {

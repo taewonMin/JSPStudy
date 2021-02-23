@@ -21,7 +21,7 @@ public class ReplyServiceImpl implements ReplyService {
 		this.sqlSessionFactory = sqlSessionFactory;
 	}
 
-	private ReplyDAO replyDAO=new ReplyDAOImpl();
+	private ReplyDAO replyDAO;
 	public void setReplyDAO(ReplyDAO replyDAO) {
 		this.replyDAO = replyDAO;
 	}

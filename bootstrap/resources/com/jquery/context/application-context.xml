@@ -29,4 +29,9 @@
 		<property name="attachDAO" ref-value="attachDAO" />
 	</bean>
 	
+	<bean id="replyService" class="com.jquery.service.ReplyServiceImpl">
+		<property name="sqlSessionFactory" ref-value="sqlSessionFactory" />
+		<property name="replyDAO" ref-value="replyDAO" />
+	</bean>
+	
 </beans>

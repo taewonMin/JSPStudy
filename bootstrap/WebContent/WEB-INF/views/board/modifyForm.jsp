@@ -1,8 +1,8 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ page trimDirectiveWhitespaces="true" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
-<!--
-This is a starter template page. Use this page to start your new project from
-scratch. This page gets rid of all links and provides the needed markup only.
--->
 <html lang="en">
 <head>
   <meta charset="utf-8">
@@ -10,11 +10,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <title>Board | Regist</title>
 
   <!-- Font Awesome Icons -->
-  <link rel="stylesheet" href="/resources/bootstrap/plugins/fontawesome-free/css/all.min.css">
+  <link rel="stylesheet" href="<%=request.getContextPath() %>/resources/bootstrap/plugins/fontawesome-free/css/all.min.css">
   <!-- Theme style -->
-  <link rel="stylesheet" href="/resources/bootstrap/dist/css/adminlte.min.css">
+  <link rel="stylesheet" href="<%=request.getContextPath() %>/resources/bootstrap/dist/css/adminlte.min.css">
   <!-- include summernote css/js -->
-  <link rel="stylesheet" href="/resources/bootstrap/plugins/summernote/summernote.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="<%=request.getContextPath() %>/resources/bootstrap/plugins/summernote/summernote.min.css" rel="stylesheet">
   <!-- Google Font: Source Sans Pro -->
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
   
@@ -54,15 +54,16 @@ scratch. This page gets rid of all links and provides the needed markup only.
 						</div>
 					</div><!--end card-header  -->
 					<div class="card-body pad">
-						<form role="form" method="post" action="regist.html" name="modifyForm">
+						<form role="form" method="post" action="modify.do" name="modifyForm" enctype="multipart/form-data">
+							<input type="hidden" name="bno" value="${board.bno }">
 							<div class="form-group">
 								<label for="title">제 목</label> 
 								<input type="text" id="title"
-									name='title' class="form-control" placeholder="제목을 쓰세요">
+									name='title' class="form-control" placeholder="제목을 쓰세요" value="${board.title }">
 							</div>							
 							<div class="form-group">
 								<label for="writer">작성자</label> 
-								<input type="text" id="writer" name="writer" class="form-control" value="">
+								<input type="text" id="writer" name="writer" class="form-control" value="${board.writer }" readonly="readonly">
 							</div>
 							<div class="form-group">
 								<label for="content">내 용</label>
@@ -77,6 +78,19 @@ scratch. This page gets rid of all links and provides the needed markup only.
 								<div class="card-body attachList" style="padding:5px;">
 									<ul class="mailbox-attachments d-flex align-items-stretch clearfix">
 										<!-- attach list -->
+										
+										<c:forEach items="${board.attachList }" var="attach">
+											<li class="attach-item">																			
+												<div class="mailbox-attachment-info float-left ">
+													<a class="mailbox-attachment-name row" name="attachedFile" attach-fileName="${attach.fileName }" attach-no="${attach.ano }"
+														 href="/board/attach/getFile.do?bno=${attach.bno }&ano=${attach.ano }"  >													
+														<span><i class="fas fa-paperclip"></i>${attach.fileName }&nbsp;&nbsp;</span>
+														<button type="button" style="border:0;outline:0;" class="badge badge-danger">X</button>
+													</a>																			
+												</div>
+											</li>	
+										</c:forEach>
+										
 									</ul>
 								</div>
 								</div>
@@ -106,35 +120,25 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <!-- /.content-wrapper -->
 
 <!-- jQuery -->
-<script src="/resources/bootstrap/plugins/jquery/jquery.min.js"></script>
+<script src="<%=request.getContextPath() %>/resources/bootstrap/plugins/jquery/jquery.min.js"></script>
 <!-- Bootstrap 4 -->
-<script src="/resources/bootstrap/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="<%=request.getContextPath() %>/resources/bootstrap/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- AdminLTE App -->
-<script src="/resources/bootstrap/dist/js/adminlte.min.js"></script>
+<script src="<%=request.getContextPath() %>/resources/bootstrap/dist/js/adminlte.min.js"></script>
 <!-- summernote Editor -->
-<script src="/resources/bootstrap/plugins/summernote/summernote.min.js"></script>
+<script src="<%=request.getContextPath() %>/resources/bootstrap/plugins/summernote/summernote.min.js"></script>
 <!-- jquery cookie -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
 <!-- handlebars -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.6/handlebars.min.js" ></script>
 <!-- common -->
-<script src="/resources/js/common.js" ></script>
+<script src="<%=request.getContextPath() %>/resources/js/common.js" ></script>
 
 <script type="text/javascript">
-var bno = getParameterValueFromUrl('bno');
-// alert(bno);
 // board 본문 가져오기
-$.getJSON("/board/detail.do?from=modify&bno="+bno,function(board){
-	//alert(board.title);
-	$('#title').val(board.title);
-	$('#writer').val(board.writer);
-	$('#viewcnt').val(board.viewcnt);
-	$('#regDate').val(prettifyDate(board.regDate));
-	$('#content').html(board.content);
-	
-	summernote_start($("#content"));
-	printData(board.attachList,$('div.attachList > ul'),$('#attach-div-template'),'.attach-item');
-});
+$('#content').html('${board.content}');
+
+summernote_start($("#content"));
 
 $('#modifyBtn').on('click',function(e){
 // 	alert("modify btn click");
@@ -156,40 +160,12 @@ $('#modifyBtn').on('click',function(e){
 		}
 	}
 	
-	var formData = new FormData(document.modifyForm);
-	formData.append("bno",bno);
-	
-	$.ajax({
-		url: '/board/modify.do',
-		data:formData,
-		type:'post',
-		processData:false,
-		contentType:false,
-		success:function(data){
-			window.location.href="/board/detail.html?from=modify&bno="+bno;
-		},
-		error : function(error){
-			alert("시스템 장애로 인해 글등록이 불가합니다.");
-		}
-	});
-	
+	var form = document.modifyForm;
+	form.submit();
 });
 
 </script>
 
-<script  type="text/x-handlebars-template"  id="attach-div-template">
-{{#each .}}
-<li class="attach-item">																			
-	<div class="mailbox-attachment-info float-left ">
-		<a class="mailbox-attachment-name row" name="attachedFile" attach-fileName="{{fileName }}" attach-no="{{ano }}"
-			 href="/board/attach/getFile.html?bno={{bno }}&ano={{ano }}"  >													
-			<span><i class="fas fa-paperclip"></i>{{fileName }}&nbsp;&nbsp;</span>
-			<button type="button" style="border:0;outline:0;" class="badge badge-danger">X</button>
-		</a>																			
-	</div>
-</li>	
-{{/each}}
-</script>
 <script type="text/javascript">
 $('div.attachList').on('click','a[name="attachedFile"] > button', function(event){
 // 	alert("x btn click");

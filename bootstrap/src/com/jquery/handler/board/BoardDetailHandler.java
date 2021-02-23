@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.jquery.dto.AttachVO;
 import com.jquery.dto.BoardVO;
+import com.jquery.dto.MemberVO;
 import com.jquery.handler.CommandHandler;
 import com.jquery.service.BoardService;
 import com.jquery.service.BoardServiceImpl;
@@ -22,10 +23,13 @@ public class BoardDetailHandler implements CommandHandler {
 	}
 	
 	@Override
-	public String process(HttpServletRequest req, HttpServletResponse res) throws Exception {
+	public String process(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		
+		String url = "board/detail";
+		
 		//1. parameter 수용
-		int bno = Integer.parseInt(req.getParameter("bno"));
-		String from = req.getParameter("from");
+		int bno = Integer.parseInt(request.getParameter("bno"));
+		String from = request.getParameter("from");
 		
 		try {
 			//2. 처리(boardService);
@@ -39,16 +43,14 @@ public class BoardDetailHandler implements CommandHandler {
 			List<AttachVO> renamedAttachList = MakeFileName.parseFileNameFromAttaches(board.getAttachList(), "\\$\\$");
 			board.setAttachList(renamedAttachList);
 			
-			//3. 결과(JsonResolver : json)
-			JsonResolver.view(res, board);
+			request.setAttribute("board", board);
 			
 		}catch(SQLException e) {
-			res.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 			e.printStackTrace();
-			throw e;
+			url = null;
 		}
 		
-		return null;
+		return url;
 	}
 
 }

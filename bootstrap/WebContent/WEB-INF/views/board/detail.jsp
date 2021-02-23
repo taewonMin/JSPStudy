@@ -1,8 +1,8 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ page trimDirectiveWhitespaces="true" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
-<!--
-This is a starter template page. Use this page to start your new project from
-scratch. This page gets rid of all links and provides the needed markup only.
--->
 <html lang="en">
 <head>
   <meta charset="utf-8">
@@ -10,9 +10,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <title>Board | home</title>
 
   <!-- Font Awesome Icons -->
-  <link rel="stylesheet" href="/resources/bootstrap/plugins/fontawesome-free/css/all.min.css">
+  <link rel="stylesheet" href="<%=request.getContextPath() %>/resources/bootstrap/plugins/fontawesome-free/css/all.min.css">
   <!-- Theme style -->
-  <link rel="stylesheet" href="/resources/bootstrap/dist/css/adminlte.min.css">
+  <link rel="stylesheet" href="<%=request.getContextPath() %>/resources/bootstrap/dist/css/adminlte.min.css">
   <!-- Google Font: Source Sans Pro -->
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
 </head>
@@ -48,7 +48,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 					<div class="card-header">
 						<h3 class="card-title">상세보기</h3>
 						<div class="card-tools">
-							<button type="button" id="modifyBtn" class="btn btn-warning" onclick="modify_go();">MODIFY</button>						
+							<button type="button" id="modifyBtn" class="btn btn-warning" onclick="location.href='modifyForm.do?bno=${board.bno}';">MODIFY</button>						
 						    <button type="button" id="removeBtn" class="btn btn-danger" onclick="remove_go();">REMOVE</button>					    
 						    <button type="button" id="listBtn" class="btn btn-primary" onclick="CloseWindow();">CLOSE</button>
 						</div>
@@ -56,22 +56,22 @@ scratch. This page gets rid of all links and provides the needed markup only.
 					<div class="card-body">
 						<div class="form-group col-sm-12">
 							<label for="title">제 목</label>
-							<input type="text" class="form-control" id="title" value="" readonly />							
+							<input type="text" class="form-control" id="title" value="${board.title }" readonly />							
 						</div>
 						<div class="row">	
 							<div class="form-group col-sm-4" >
 								<label for="writer">작성자</label>
-								<input type="text" class="form-control" id="writer" value="" readonly />
+								<input type="text" class="form-control" id="writer" value="${board.writer }" readonly />
 							</div>		
 							
 							<div class="form-group col-sm-4" >
 								<label for="regDate">작성일</label>
-								<input type="text" class="form-control" id="regDate" value="" readonly />
+								<input type="text" class="form-control" id="regDate" value="${board.regDate }" readonly />
 							
 							</div>
 							<div class="form-group col-sm-4" >
 								<label for="viewcnt">조회수</label>
-								<input type="text" class="form-control" id="viewcnt" value="" readonly />
+								<input type="text" class="form-control" id="viewcnt" value="${board.viewcnt }" readonly />
 							</div>
 						</div>		
 						<div class="form-group col-sm-12">
@@ -84,7 +84,24 @@ scratch. This page gets rid of all links and provides the needed markup only.
 							<div class="card-header" style="padding-top:0;padding-bottom:0;">
 								<i class="nav-icon fas fa-book"></i>&nbsp;<span style="font-weight:bold;">Attaches</span>
 							</div>
-								<div class="card-body"><div class="row attachList">
+							<div class="card-body">
+								<div class="row attachList">
+								
+									<c:forEach items="${board.attachList }" var="attach">
+									<div class="col-md-4 col-sm-4 col-xs-12 attach"  style="cursor:pointer;"
+										 onclick="location.href='/board/attach/getFile.do?bno=${attach.bno }&ano=${attach.ano }';">
+										<div class="info-box">	
+										 	<span class="info-box-icon bg-yellow">
+												<i class="fa fa-copy"></i>
+											</span>
+											<div class="info-box-content">
+												<span class ="info-box-text">${attach.regDate }</span>
+												<span class ="info-box-number">${attach.fileName }</span>
+											</div>
+										</div>
+									</div>
+									</c:forEach>
+									
 								</div> 
 							</div>
 						</div>
@@ -115,7 +132,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 					</div>
 					<div class="card-footer">
 						<label for="newReplyWriter">Writer</label>
-						<input class="form-control" type="text" placeholder="USER ID"	 id="newReplyWriter"> 
+						<input class="form-control" type="text" placeholder="USER ID"	 id="newReplyWriter" value="${loginUser.id }" readonly="readonly"> 
 						<label for="newReplyText">Reply Text</label>
 						<input class="form-control" type="text"	placeholder="REPLY TEXT" id="newReplyText">
 						<br/>
@@ -160,60 +177,27 @@ scratch. This page gets rid of all links and provides the needed markup only.
 </div>
 
 <!-- jQuery -->
-<script src="/resources/bootstrap/plugins/jquery/jquery.min.js"></script>
+<script src="<%=request.getContextPath() %>/resources/bootstrap/plugins/jquery/jquery.min.js"></script>
 <!-- Bootstrap 4 -->
-<script src="/resources/bootstrap/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="<%=request.getContextPath() %>/resources/bootstrap/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- AdminLTE App -->
-<script src="/resources/bootstrap/dist/js/adminlte.min.js"></script>
+<script src="<%=request.getContextPath() %>/resources/bootstrap/dist/js/adminlte.min.js"></script>
 <!-- Summernote -->
-<script src="/resources/bootstrap/plugins/summernote/summernote-bs4.min.js"></script>
+<script src="<%=request.getContextPath() %>/resources/bootstrap/plugins/summernote/summernote-bs4.min.js"></script>
 <!-- jquery cookie -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
 <!-- handlebars -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.6/handlebars.min.js" ></script>
 <!-- common -->
-<script src="/resources/js/common.js?v=2" ></script>
-
-<script  type="text/x-handlebars-template"  id="attach-div-template">
-{{#each .}}
-	<div class="col-md-4 col-sm-4 col-xs-12 attach"  style="cursor:pointer;"
-		 onclick="location.href='/board/attach/getFile.do?bno={{bno }}&ano={{ano }}';">
-		<div class="info-box">	
-		 	<span class="info-box-icon bg-yellow">
-				<i class="fa fa-copy"></i>
-			</span>
-			<div class="info-box-content">
-				<span class ="info-box-text">{{prettifyDate regDate }}</span>
-				<span class ="info-box-number">{{fileName }}</span>
-			</div>
-		</div>
-	</div>	
-{{/each}}										 
-</script>
+<script src="<%=request.getContextPath() %>/resources/js/common.js?v=2" ></script>
 
 <script type="text/javascript">
-var bno = getParameterValueFromUrl('bno');
-var queryParams = getParameterValueFromUrl();
-//alert(bno);
 
-//board 본문 가져오기
-$.getJSON("/board/detail.do?"+queryParams,function(board){
-	//alert(board.title);
-	$('#title').val(board.title);
-	$('#writer').val(board.writer);
-	$('#viewcnt').val(board.viewcnt);
-	$('#regDate').val(prettifyDate(board.regDate));
-	$('#content').html(board.content);
-	
-	printData(board.attachList,$('div.attachList'),$('#attach-div-template'),'.attach');
-});
+$('#content').html('${board.content}');
 
-function modify_go(){
-	location.href="/board/modifyForm.html?bno="+bno;
-}
 function remove_go(){
 	if(confirm("정말 삭제하시겠습니까?")){
-		location.href="/baord/remove.do?bno="+bno;
+		location.href="remove.do?bno=${board.bno}";
 	}
 }
 </script>
@@ -258,9 +242,10 @@ function searchList_go(page){
 	for(var key of pageParamsKeys){
 		$.cookie("reply_"+key,pageParams[key],{path:"/"});
 	}
-	getPage("/board/replies/list.do?bno="+bno+"&page="+replyPage);
+	getPage("/board/replies/list.do?bno=${board.bno}&page="+replyPage);
 	
 	return false;
+	
 }
 
 function replyRegist_go(){
@@ -273,7 +258,7 @@ function replyRegist_go(){
 	}
 	
 	var data={
-			"bno": ""+bno+"",
+			"bno": "${board.bno}",
 			"replyer": replyer,
 			"replytext": replytext
 	}
@@ -288,7 +273,7 @@ function replyRegist_go(){
 				alert("댓글이 등록되었습니다.")
 				replyPage=result[1];	// 페이지 이동
 				$.cookie('reply_page',result[1],{path:"/"});	// 상태유지
-				getPage("/board/replies/list.do?bno="+bno+"&page="+result[1]);	// 리스트 출력
+				getPage("/board/replies/list.do?bno=${board.bno}&page="+result[1]);	// 리스트 출력
 				$('#newReplyWriter').val("");
 				$('#newReplyText').val("");
 			}else{
@@ -321,7 +306,7 @@ $('#replyModBtn').on('click',function(event){
 		data:form.serialize(),
 		success:function(result){
 			alert("수정되었습니다.");
-			getPage("/board/replies/list.do?bno="+bno+"&page="+replyPage);
+			getPage("/board/replies/list.do?bno=${board.bno}&page="+replyPage);
 		},
 		error:function(error){
 			alert("수정 실패했습니다.");
@@ -341,11 +326,11 @@ $('#replyDelBtn').on('click', function(event){
 	$.ajax({
 		url:"/board/replies/remove.do",
 		type:"post",
-		data:JSON.stringify({rno:rno,bno:bno}),
+		data:JSON.stringify({rno:rno,bno:${board.bno}}),
 		success:function(page){
 			alert("삭제되었습니다.");
 			$.cookie('reply_page',page,{path:"/"});
-			getPage("/board/replies/list.do?bno="+bno+"&page="+page);
+			getPage("/board/replies/list.do?bno=${board.bno}&page="+page);
 		},
 		error:function(error){
 			alert("삭제 실패했습니다.");

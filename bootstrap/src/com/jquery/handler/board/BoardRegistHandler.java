@@ -1,24 +1,18 @@
 package com.jquery.handler.board;
 
-import java.io.File;
-import java.util.ArrayList;
+import java.io.PrintWriter;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileUploadException;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
-
 import com.jquery.dto.AttachVO;
 import com.jquery.dto.BoardVO;
 import com.jquery.handler.CommandHandler;
 import com.jquery.service.BoardService;
-import com.jquery.service.BoardServiceImpl;
+import com.jquery.utils.FileUploadResolver;
 import com.jquery.utils.GetUploadPath;
-import com.jquery.utils.MakeFileName;
-import com.jquery.utils.ServletFileUploadBuilder;
+import com.jquery.utils.MultipartHttpServletRequestParser;
 
 public class BoardRegistHandler implements CommandHandler {
 
@@ -27,103 +21,57 @@ public class BoardRegistHandler implements CommandHandler {
 		this.boardService = boardService;
 	}
 	
-	@Override
-	public String process(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		
-		try {
-			BoardVO board = fileUpload(request);
-			boardService.regist(board);
-		} catch(Exception e) {
-			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-			e.printStackTrace();
-		}
-		
-		return null;
-	}
-
 	// 업로드 파일 환경 설정
 	private static final int MEMORY_THRESHOLD = 1024*1024*3;	// 3MB
 	private static final int MAX_FILE_SIZE = 1024*1024*40;	// 40MB
 	private static final int MAX_REQUEST_SIZE = 1024*1024*200;	// 200MB
 	
-	private BoardVO fileUpload(HttpServletRequest request) throws Exception {
-		BoardVO board = new BoardVO();
-		List<AttachVO> attachList = new ArrayList<AttachVO>();
+	@Override
+	public String process(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		String url = null;
 		
-		ServletFileUpload upload = ServletFileUploadBuilder.build(request, MEMORY_THRESHOLD, MAX_FILE_SIZE, MAX_REQUEST_SIZE);
+		response.setContentType("text/html;charset=utf-8");
+		PrintWriter out = response.getWriter();
 		
-		// 실제 저장 경로를 설정
-		String uploadPath = GetUploadPath.getUploadPath("attach.upload");
-		
-		File file = new File(uploadPath);
-		if(!file.mkdirs()) {
-			System.out.println(uploadPath + "가 이미 존재하거나 생성을 실패했습니다.");
-		}
-		
+		MultipartHttpServletRequestParser multi = null;
 		try {
-			List<FileItem> formItems = upload.parseRequest(request);
 			
-			String writer = null;	// request.getParameter("writer")
-			String title = null;	// request.getParameter("title")
-			String content = null;	// request.getParameter("content")
-			int bno = -1;	// Integer.parseInt(request.getParameter("bno"))
+			multi = new MultipartHttpServletRequestParser(request, MEMORY_THRESHOLD, MAX_FILE_SIZE, MAX_REQUEST_SIZE);
 			
-			for(FileItem item : formItems) {
-				// 1.1 필드
-				if(item.isFormField()) {
-					// 파라미터 구분(파라미터 이름)
-					switch(item.getFieldName()) {
-					case "title":
-						title = item.getString("utf-8");
-						break;
-					case "writer":
-						writer = item.getString("utf-8");
-						break;
-					case "content":
-						content = item.getString("utf-8");
-						break;
-					}
-					
-				}else {	// 1.2 파일
-					// summernote의 files를 제외함
-					if(!item.getFieldName().equals("uploadFile")) 
-						continue;
-					
-					String fileName = new File(item.getName()).getName();
-					fileName = MakeFileName.toUUIDFileName(fileName, "$$");
-					String filePath = uploadPath + File.separator + fileName;
-					File storeFile = new File(filePath);
-					
-					// local HDD에 저장
-					try {
-						item.write(storeFile);
-					}catch(Exception e) {
-						e.printStackTrace();
-						throw e;
-					}
-					
-					// DB에 저장할 attach에 file 내용 추가
-					AttachVO attach = new AttachVO();
-					attach.setFileName(fileName);
-					attach.setUploadPath(uploadPath);
-					attach.setFileType(fileName.substring(fileName.lastIndexOf(".") + 1));
-					
-					attachList.add(attach);
-					
-					System.out.println("upload file : " + attach);
-				}
-			}
+			// 파일 저장 경로 설정
+			String uploadPath = GetUploadPath.getUploadPath("attach.upload");
 			
+			// 파일 저장
+			List<AttachVO> attachList = FileUploadResolver.fileUpload(multi.getFileItems("uploadFile"), uploadPath);
+			
+			// 게시글 저장
+			String writer = multi.getParameter("writer");
+			String title = multi.getParameter("title");
+			String content = multi.getParameter("content");
+			
+			BoardVO board = new BoardVO();
 			board.setAttachList(attachList);
 			board.setWriter(writer);
 			board.setContent(content);
 			board.setTitle(title);
+				
+			boardService.regist(board);
 			
-		} catch(FileUploadException e) {
+			// 결과
+			out.println("<script>");
+			out.println("window.opener.location.href='"+request.getContextPath()+"/board/list.do';");
+			out.println("window.close();");
+			out.println("</script>");
+		} catch(Exception e) {
 			e.printStackTrace();
-			throw e;
+			out.println("<script>");
+			out.println("alert('글등록이 실패했습니다.');");
+			out.println("window.close();");
+			out.println("</script>");
 		}
 		
-		return board;
+		return url;
+		
 	}
+
 }

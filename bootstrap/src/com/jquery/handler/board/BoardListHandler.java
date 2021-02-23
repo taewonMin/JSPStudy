@@ -21,27 +21,29 @@ public class BoardListHandler implements CommandHandler {
 	
 	@Override
 	public String process(HttpServletRequest request, HttpServletResponse response) throws Exception {
-//		String page = request.getParameter("page");
-//		String perPageNum = request.getParameter("perPageNum");
-//		String searchType = request.getParameter("searchType");
-//		String keyword = request.getParameter("keyword");
-//		
-//		SearchCriteria cri = new SearchCriteria(page, perPageNum, searchType, keyword);
 		
-		ObjectMapper mapper = new ObjectMapper();
+		String url = "board/list";
 		
-		SearchCriteria cri = mapper.readValue(request.getReader(), SearchCriteria.class);
+		// 입력
+		SearchCriteria cri = new SearchCriteria();
 		
-		try {
-			Map<String, Object> dataMap = boardService.getBoardList(cri);
-			
-			JsonResolver.view(response, dataMap);
-			
-		}catch(Exception e) {
-			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-			e.printStackTrace();
-		}
-		return null;
+		String page = request.getParameter("page");
+		String perPageNum = request.getParameter("perPageNum");
+		String searchType = request.getParameter("searchType");
+		String keyword = request.getParameter("keyword");
+		
+		cri.setPage(page);
+		cri.setPerPageNum(perPageNum);
+		cri.setSearchType(searchType);
+		cri.setKeyword(keyword);
+		
+		// 처리
+		Map<String, Object> dataMap = boardService.getBoardList(cri);
+		
+		request.setAttribute("boardList", dataMap.get("boardList"));
+		request.setAttribute("pageMaker", dataMap.get("pageMaker"));
+		
+		return url;
 	}
 
 }
