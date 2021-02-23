@@ -17,7 +17,13 @@ public class ViewResolver {
 		}
 		
 		if(url.indexOf("redirect:") > -1) {
-			url = request.getContextPath() + url.replace("redirect:", "");
+			
+			String contextPath = request.getContextPath();
+			if(contextPath.length() < 1) {
+				contextPath = "/";
+			}
+			
+			url = contextPath + url.replace("redirect:", "");
 			response.sendRedirect(url);
 		}else {
 			String prefix = "/WEB-INF/views/";

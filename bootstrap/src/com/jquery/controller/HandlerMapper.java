@@ -68,8 +68,8 @@ public class HandlerMapper {
 		}
 	}
 	
-	public CommandHandler getAction(String url) {
-		CommandHandler action = commandMap.get(url);
-		return action;
+	public CommandHandler getHandler(String url) {
+		CommandHandler handler = commandMap.get(url);
+		return handler;
 	}
 }
