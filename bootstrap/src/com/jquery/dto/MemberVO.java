@@ -1,12 +1,14 @@
 package com.jquery.dto;
 
+import java.util.Date;
+
 public class MemberVO {
 	private String id;			// 아이디
 	private String pwd;			// 비밀번호
 	private String name="---";	// 이름
 	private String phone;		// 전화번호
 	private String email;		// 이메일
-	private String regdate; 	// 등록일
+	private Date regdate;	 	// 등록일
 	private String picture; 	// 사진 파일경로/파일명
 	private String authority;	// 권한
 	private String enabled;		// 사용여부
@@ -49,10 +51,10 @@ public class MemberVO {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	public String getRegdate() {
+	public Date getRegdate() {
 		return regdate;
 	}
-	public void setRegdate(String regdate) {
+	public void setRegdate(Date regdate) {
 		this.regdate = regdate;
 	}
 	public String getAuthority() {

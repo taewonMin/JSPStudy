@@ -2,27 +2,19 @@
     pageEncoding="UTF-8"%>
 <%@ page trimDirectiveWhitespaces="true" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
+<c:set var="boardList" value="${dataMap.boardList }" />
+<c:set var="pageMaker" value="${dataMap.pageMaker }" />
 <c:set var="cri" value="${pageMaker.cri }" />
 
-<!DOCTYPE html>
-<!--
-This is a starter template page. Use this page to start your new project from
-scratch. This page gets rid of all links and provides the needed markup only.
--->
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  
-  <title>Board | home</title>
+<%@ include file="/WEB-INF/views/include/header.jsp" %>
 
-  <!-- Font Awesome Icons -->
-  <link rel="stylesheet" href="<%=request.getContextPath() %>/resources/bootstrap/plugins/fontawesome-free/css/all.min.css">
-  <!-- Theme style -->
-  <link rel="stylesheet" href="<%=request.getContextPath() %>/resources/bootstrap/dist/css/adminlte.min.css">
-  <!-- Google Font: Source Sans Pro -->
-  <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
-</head>
+<style type="text/css">
+	table th,td{
+		text-align: center;
+	}
+</style>
 <body class="hold-transition sidebar-mini">
 
 
@@ -56,7 +48,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 					<div class="input-group row">	
 						 <!-- sort num -->
 					  	<select class="form-control col-md-3" name="perPageNum" id="perPageNum" onchange="searchList_go(1);">
-					  		<option value="10" >정렬개수</option>
+					  		<option value="10" ${cri.perPageNum == 10 ? 'selected':''}>정렬개수</option>
 					  		<option value="20" ${cri.perPageNum == 20 ? 'selected':''}>20개씩</option>
 					  		<option value="30" ${cri.perPageNum == 30 ? 'selected':''}>30개씩</option>
 					  		<option value="50" ${cri.perPageNum == 50 ? 'selected':''}>50개씩</option>
@@ -88,59 +80,38 @@ scratch. This page gets rid of all links and provides the needed markup only.
 						<th>등록일</th>
 						<th style="width:10%;">조회수</th>
 					</tr>
-					
-					<c:forEach items="${boardList }" var="board">			
-						<tr style='font-size:0.85em;'>
-							<td>${board.bno }</td>
-							<td style="text-align:left;max-width: 100px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
-								<a href="javascript:OpenWindow('detail.do?bno=${board.bno }','상세보기',800,700);">
-									<span class="col-sm-12 ">${board.title }
-										<span class="nav-item" style="display:${board.replycnt > 0 ? 'visible' : 'none'};">
-											&nbsp;&nbsp;<i class="fa fa-comment"></i>
-											<span class="badge badge-warning navbar-badge">${board.replycnt}</span>
-										</span>
-									</span>
-								</a>
+					<c:if test="${empty boardList }">
+						<tr>
+							<td colspan="5">
+								<strong>해당 내용이 없습니다.</strong>
 							</td>
-							<td>${board.writer }</td>
-							<td>${board.regDate }</td>
-							<td><span class="badge bg-red">${board.viewcnt }</span></td>
 						</tr>
-					</c:forEach>
+					</c:if>
+					<c:if test="${!empty boardList }">
+						<c:forEach items="${boardList }" var="board">			
+							<tr style='font-size:0.85em;'>
+								<td>${board.bno }</td>
+								<td id="boardTitle" style="text-align:left;max-width: 100px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
+									<a href="javascript:OpenWindow('detail.do?bno=${board.bno }','상세보기',800,700);">
+										<span class="col-sm-12 ">${board.title }
+											<span class="nav-item" style="display:${board.replycnt ne 0 ? 'visible':'none'};">
+												&nbsp;&nbsp;<i class="fa fa-comment"></i>
+												<span class="badge badge-warning navbar-badge">${board.replycnt}</span>
+											</span>
+										</span>
+									</a>
+								</td>
+								<td>${board.writer }</td>
+								<td><fmt:formatDate value="${board.regDate }" pattern="yyyy-MM-dd"/></td>
+								<td><span class="badge bg-red">${board.viewcnt }</span></td>
+							</tr>
+						</c:forEach>
+					</c:if>
 					
 				</table>				
 			</div>
 			<div class="card-footer">
-				<ul id="pagination" class="pagination justify-content-center m-0">
-					<li class="page-item">
-						<a class="page-link" href="javascript:searchList_go(1);">
-						<i class="fas fa-angle-double-left"></i>
-						</a>
-					</li>
-					<li class="page-item">
-						<a class="page-link" href="javascript:searchList_go(
-						${pageMaker.prev ? pageMaker.startPage-1 : 1}				
-						);"><i class="fas fa-angle-left"></i></a>
-					</li>
-					
-					<c:forEach var="pageNum" begin="${pageMaker.startPage }" end="${pageMaker.endPage }">
-						<li class="page-item ${pageMaker.cri.page == pageNum?'active':''}">
-							<a class="page-link" href="javascript:searchList_go(${pageNum});" >${pageNum }
-							</a>
-						</li>
-					</c:forEach>
-					
-					<li class="page-item">
-						<a class="page-link" href="javascript:searchList_go(
-						${pageMaker.next ? pageMaker.endPage+1 : pageMaker.cri.page}			
-						);"><i class="fas fa-angle-right" ></i></a>
-					</li>
-					<li class="page-item">
-						<a class="page-link" href="javascript:searchList_go(
-							${pageMaker.realEndPage} );">
-							<i class="fas fa-angle-double-right"></i></a>
-					</li>		
-				</ul>		
+				<%@ include file="/WEB-INF/views/common/pagination.jsp" %>
 			</div>
 		</div>
 		
@@ -149,45 +120,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
   </div>
   <!-- /.content-wrapper -->
 
-<!-- REQUIRED SCRIPTS -->
-
-<!-- jQuery -->
-<script src="<%=request.getContextPath() %>/resources/bootstrap/plugins/jquery/jquery.min.js"></script>
-<!-- Bootstrap 4 -->
-<script src="<%=request.getContextPath() %>/resources/bootstrap/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-<!-- AdminLTE App -->
-<script src="<%=request.getContextPath() %>/resources/bootstrap/dist/js/adminlte.min.js"></script>
-<!-- handlebars -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.6/handlebars.min.js" ></script>
-
-<!-- common -->
-<script src="<%=request.getContextPath() %>/resources/js/common.js?v=1"></script>
-
-<form id="boardForm">
-	<input type="hidden" name="page" value="${cri.page}">
-	<input type="hidden" name="perPageNum" value="${cri.perPageNum}">
-	<input type="hidden" name="searchType" value="${cri.searchType}">
-	<input type="hidden" name="keyword" value="${cri.keyword}">
-</form>
-
-<script type="text/javascript">
-
-function searchList_go(page,url){
-   var boardForm = $('#boardForm');
-   boardForm.find("[name='page']").val(page);
-   boardForm.find("[name='perPageNum']").val($('select[name="perPageNum"]').val());
-   boardForm.find("[name='searchType']").val($('select[name="searchType"]').val());
-   boardForm.find("[name='keyword']").val($('div.input-group>input[name="keyword"]').val());
-   boardForm.attr("method","post");
-   if(url){
-	   boardForm.attr("action",url)
-   }else{
-	   boardForm.attr("action","list.do")
-   }
-   
-   boardForm.submit();
-}
-</script>
-
 </body>
-</html>
+
+<%@ include file="/WEB-INF/views/include/footer.jsp" %>
