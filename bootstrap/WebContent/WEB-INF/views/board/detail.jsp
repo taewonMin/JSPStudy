@@ -2,23 +2,11 @@
     pageEncoding="UTF-8"%>
 <%@ page trimDirectiveWhitespaces="true" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  
-  <title>Board | home</title>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
-  <!-- Font Awesome Icons -->
-  <link rel="stylesheet" href="<%=request.getContextPath() %>/resources/bootstrap/plugins/fontawesome-free/css/all.min.css">
-  <!-- Theme style -->
-  <link rel="stylesheet" href="<%=request.getContextPath() %>/resources/bootstrap/dist/css/adminlte.min.css">
-  <!-- Google Font: Source Sans Pro -->
-  <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
-</head>
+<title>상세 페이지</title>
+
 <body class="hold-transition sidebar-mini">
-
-
 
   <!-- Content Wrapper. Contains page content -->
   <div style="width:100%;">
@@ -66,8 +54,7 @@
 							
 							<div class="form-group col-sm-4" >
 								<label for="regDate">작성일</label>
-								<input type="text" class="form-control" id="regDate" value="${board.regDate }" readonly />
-							
+								<input type="text" class="form-control" id="regDate" value="<fmt:formatDate value="${board.regDate }" pattern="yyyy-MM-dd" />" readonly />
 							</div>
 							<div class="form-group col-sm-4" >
 								<label for="viewcnt">조회수</label>
@@ -76,7 +63,7 @@
 						</div>		
 						<div class="form-group col-sm-12">
 							<label for="content">내 용</label>
-							<div id="content"></div>	
+							<div id="content">${board.content }</div>	
 						</div>						
 					</div>
 					<div class="card-footer" style="padding:0;">
@@ -89,13 +76,13 @@
 								
 									<c:forEach items="${board.attachList }" var="attach">
 									<div class="col-md-4 col-sm-4 col-xs-12 attach"  style="cursor:pointer;"
-										 onclick="location.href='/board/attach/getFile.do?bno=${attach.bno }&ano=${attach.ano }';">
+										 onclick="location.href='<%= request.getContextPath()%>/board/attach/getFile.do?bno=${attach.bno }&ano=${attach.ano }';">
 										<div class="info-box">	
 										 	<span class="info-box-icon bg-yellow">
 												<i class="fa fa-copy"></i>
 											</span>
 											<div class="info-box-content">
-												<span class ="info-box-text">${attach.regDate }</span>
+												<span class ="info-box-text"><fmt:formatDate value="${attach.regDate }" pattern="yyyy-MM-dd" /></span>
 												<span class ="info-box-number">${attach.fileName }</span>
 											</div>
 										</div>
@@ -131,8 +118,7 @@
 						</div>
 					</div>
 					<div class="card-footer">
-						<label for="newReplyWriter">Writer</label>
-						<input class="form-control" type="text" placeholder="USER ID"	 id="newReplyWriter" value="${loginUser.id }" readonly="readonly"> 
+						<input class="form-control" type="hidden" placeholder="USER ID"	 id="newReplyWriter" value="${loginUser.id }"> 
 						<label for="newReplyText">Reply Text</label>
 						<input class="form-control" type="text"	placeholder="REPLY TEXT" id="newReplyText">
 						<br/>
@@ -176,172 +162,16 @@
   </div>
 </div>
 
-<!-- jQuery -->
-<script src="<%=request.getContextPath() %>/resources/bootstrap/plugins/jquery/jquery.min.js"></script>
-<!-- Bootstrap 4 -->
-<script src="<%=request.getContextPath() %>/resources/bootstrap/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-<!-- AdminLTE App -->
-<script src="<%=request.getContextPath() %>/resources/bootstrap/dist/js/adminlte.min.js"></script>
-<!-- Summernote -->
-<script src="<%=request.getContextPath() %>/resources/bootstrap/plugins/summernote/summernote-bs4.min.js"></script>
-<!-- jquery cookie -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
-<!-- handlebars -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.6/handlebars.min.js" ></script>
-<!-- common -->
-<script src="<%=request.getContextPath() %>/resources/js/common.js?v=2" ></script>
-
 <script type="text/javascript">
-
-$('#content').html('${board.content}');
 
 function remove_go(){
 	if(confirm("정말 삭제하시겠습니까?")){
 		location.href="remove.do?bno=${board.bno}";
 	}
 }
-</script>
-
-<script type="text/x-handlebars-template"  id="reply-list-template" >
-{{#each .}}
-<div class="replyLi" >
-	<i class="fas fa-comments bg-yellow"></i>
- 	<div class="timeline-item" >
-  		<span class="time">
-    		<i class="fa fa-clock"></i>{{prettifyDate regdate}}
-	 		<a class="btn btn-primary btn-xs" id="modifyReplyBtn" data-rno={{rno}}
-	    		data-replyer={{replyer}} data-toggle="modal" data-target="#modifyModal">Modify</a>
-  		</span>
-	
-  		<h3 class="timeline-header"><strong style="display:none;">{{rno}}</strong>{{replyer}}</h3>
-  		<div class="timeline-body" id="{{rno}}-replytext">{{replytext}} </div>
-	</div>
-</div>
-{{/each}}	
-</script>
-
-<script type="text/javascript">	// 댓글 리스트
-var replyPage=$.cookie('reply_page') ? $.cookie('reply_page') : 1;
-
-searchList_go(replyPage);
-
-//reply list
-function getPage(pageInfo){
-	$.getJSON(pageInfo, function(data){
-		printData(data.replyList,$('#repliesDiv'),$('#reply-list-template'),'.replyLi');
-		printPaging(data.pageMaker,$('.pagination'));
-	});
-}
-
-function searchList_go(page){
-	
-	replyPage = page;
-	setPageParams(replyPage,10,'','');
-	
-	var pageParamsKeys = Object.keys(pageParams);
-	for(var key of pageParamsKeys){
-		$.cookie("reply_"+key,pageParams[key],{path:"/"});
-	}
-	getPage("/board/replies/list.do?bno=${board.bno}&page="+replyPage);
-	
-	return false;
-	
-}
-
-function replyRegist_go(){
-	var replyer = $('#newReplyWriter').val();
-	var replytext = $('#newReplyText').val();
-	
-	if(!(replyer && replytext)){
-		alert("작성자 혹은 내용은 필수입니다.");
-		return;
-	}
-	
-	var data={
-			"bno": "${board.bno}",
-			"replyer": replyer,
-			"replytext": replytext
-	}
-	
-	$.ajax({
-		url:"/board/replies/regist.do",
-		type:"post",
-		data: JSON.stringify(data),
-		success: function (data){
-			var result=data.split(",");
-			if(result[0]=="SUCCESS"){
-				alert("댓글이 등록되었습니다.")
-				replyPage=result[1];	// 페이지 이동
-				$.cookie('reply_page',result[1],{path:"/"});	// 상태유지
-				getPage("/board/replies/list.do?bno=${board.bno}&page="+result[1]);	// 리스트 출력
-				$('#newReplyWriter').val("");
-				$('#newReplyText').val("");
-			}else{
-				alert("댓글이 등록을 실패했습니다.")
-			}
-		}
-	});
-	
-}
-
-//reply modify 권한체크
-$('div.timeline').on('click','#modifyReplyBtn',function(event){
-// 	alert("modify reply btn click");
-	var rno = $(this).attr("data-rno");
-	var replyer = $(this).attr("data-replyer");
-	var replytext = $('#'+rno+'-replytext').text();
-	
-	$('#modifyModal input#replytext').val(replytext);
-	$('#modifyModal input#rno').val(rno);
-	$('#modifyModal input#replyer').val(replyer);
-});
-
-$('#replyModBtn').on('click',function(event){
-	var form = $('#modifyModal form[role="frm"]');
-// 	alert(form.serialize());
-	
-	$.ajax({
-		url: "/board/replies/modify.do",
-		type:"post",
-		data:form.serialize(),
-		success:function(result){
-			alert("수정되었습니다.");
-			getPage("/board/replies/list.do?bno=${board.bno}&page="+replyPage);
-		},
-		error:function(error){
-			alert("수정 실패했습니다.");
-		},
-		complete:function(){
-			$('#modifyModal').modal('hide');
-		}
-	});
-	
-});
-
-$('#replyDelBtn').on('click', function(event){
-// 	alert("reply delete btn click");
-	var rno = $('#modifyModal input#rno').val();
-// 	alert(rno);
-
-	$.ajax({
-		url:"/board/replies/remove.do",
-		type:"post",
-		data:JSON.stringify({rno:rno,bno:${board.bno}}),
-		success:function(page){
-			alert("삭제되었습니다.");
-			$.cookie('reply_page',page,{path:"/"});
-			getPage("/board/replies/list.do?bno=${board.bno}&page="+page);
-		},
-		error:function(error){
-			alert("삭제 실패했습니다.");
-		},
-		complete:function(){
-			$('#modifyModal').modal('hide');
-		}
-	});
-});
 
 </script>
+
+<%@ include file="detail_reply.jsp" %>
 
 </body>
-</html>
