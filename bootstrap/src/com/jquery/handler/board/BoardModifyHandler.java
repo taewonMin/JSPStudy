@@ -34,12 +34,16 @@ public class BoardModifyHandler implements CommandHandler {
 		
 		String url= "board/modify_success";
 		
+		BoardVO board = null;
 		try {
-			boardService.modify(modifyFile(request, response));
+			board = modifyFile(request, response);
+			boardService.modify(board);
 			
 		}catch(Exception e) {
 			e.printStackTrace();
-			url="board/modify_fail";
+			url=null;
+		}finally {
+			request.setAttribute("board", board);
 		}
 		
 		return url;
@@ -84,5 +88,4 @@ public class BoardModifyHandler implements CommandHandler {
 		
 		return board;
 	}
-
 }
