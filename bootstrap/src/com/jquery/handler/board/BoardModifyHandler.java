@@ -7,6 +7,8 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.fileupload.FileItem;
+
 import com.jquery.dto.AttachVO;
 import com.jquery.dto.BoardVO;
 import com.jquery.handler.CommandHandler;
@@ -30,25 +32,45 @@ public class BoardModifyHandler implements CommandHandler {
 	@Override
 	public String process(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		
-		String url= null;
+		String url= "board/modify_success";
 		
-		response.setContentType("text/html;charset=utf-8");
-		PrintWriter out = response.getWriter();
-		
-		MultipartHttpServletRequestParser multi = null;
 		try {
-			multi = new MultipartHttpServletRequestParser(request, MEMORY_THRESHOLD, MAX_FILE_SIZE, MAX_REQUEST_SIZE);
+			boardService.modify(modifyFile(request, response));
 			
-			// 파일 삭제
-			String[] deleteFilesAno = multi.getParameterValues("deleteFile");
-			
-			if(deleteFilesAno != null) for(String deletefileAno : deleteFilesAno) {
-				
-				int ano = Integer.parseInt(deletefileAno);
-				
+		}catch(Exception e) {
+			e.printStackTrace();
+			url="board/modify_fail";
+		}
+		
+		return url;
+	}
+	
+	private BoardVO modifyFile(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		
+		BoardVO board = null;
+		
+		MultipartHttpServletRequestParser multi = new MultipartHttpServletRequestParser(request, MEMORY_THRESHOLD, MAX_FILE_SIZE, MAX_REQUEST_SIZE);
+		
+		FileItem[] fileItems = multi.getFileItems("uploadFile");
+		
+		// 파일 저장 경로 설정
+		String uploadPath = GetUploadPath.getUploadPath("attach.upload");
+		// 파일 저장
+		List<AttachVO> attachList = FileUploadResolver.fileUpload(fileItems, uploadPath);
+		
+		board = new BoardVO();
+		board.setBno(Integer.parseInt(multi.getParameter("bno")));
+		board.setTitle(multi.getParameter("title"));
+		board.setContent(multi.getParameter("content"));
+		board.setWriter(multi.getParameter("writer"));
+		board.setAttachList(attachList);
+	
+		// 파일 삭제 및 DB삭제
+		String[] deleteFiles = multi.getParameterValues("deleteFile");
+		if(deleteFiles != null && deleteFiles.length>0) {
+			for(String anoStr : deleteFiles) {
+				int ano = Integer.parseInt(anoStr);
 				AttachVO attach = boardService.getAttachVO(ano);
-				
-				boardService.removeAttachAno(ano);	// DB 삭제
 				
 				String filePath = attach.getUploadPath() + File.separator + attach.getFileName();					
 				File targetFile = new File(filePath);
@@ -56,41 +78,11 @@ public class BoardModifyHandler implements CommandHandler {
 				if(targetFile.exists()) {	
 					targetFile.delete();	// 파일 삭제
 				}
-				
+				boardService.removeAttachAno(ano);	// DB 삭제
 			}
-			
-			// 파일 저장 경로 설정
-			String uploadPath = GetUploadPath.getUploadPath("attach.upload");
-			
-			// 파일 저장
-			List<AttachVO> attachList = FileUploadResolver.fileUpload(multi.getFileItems("uploadFile"), uploadPath);
-			
-			int bno = Integer.parseInt(multi.getParameter("bno"));
-			String writer = multi.getParameter("writer");
-			String title = multi.getParameter("title");
-			String content = multi.getParameter("content");
-			
-			BoardVO board = new BoardVO();
-			board.setBno(bno);
-			board.setWriter(writer);
-			board.setContent(content);
-			board.setTitle(title);
-			board.setAttachList(attachList);
-			
-			boardService.modify(board);
-			
-			// 결과
-			out.println("<script>");
-			out.println("window.location.href='"+request.getContextPath()+"/board/detail.do?from=modify&bno="+bno+"';");
-			out.println("</script>");
-		}catch(Exception e) {
-			e.printStackTrace();
-			out.println("<script>");
-			out.println("alert('글수정이 실패했습니다.');");
-			out.println("</script>");
 		}
 		
-		return url;
+		return board;
 	}
 
 }

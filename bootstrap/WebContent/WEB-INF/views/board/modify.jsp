@@ -2,23 +2,9 @@
     pageEncoding="UTF-8"%>
 <%@ page trimDirectiveWhitespaces="true" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  
-  <title>Board | Regist</title>
 
-  <!-- Font Awesome Icons -->
-  <link rel="stylesheet" href="<%=request.getContextPath() %>/resources/bootstrap/plugins/fontawesome-free/css/all.min.css">
-  <!-- Theme style -->
-  <link rel="stylesheet" href="<%=request.getContextPath() %>/resources/bootstrap/dist/css/adminlte.min.css">
-  <!-- include summernote css/js -->
-  <link rel="stylesheet" href="<%=request.getContextPath() %>/resources/bootstrap/plugins/summernote/summernote.min.css" rel="stylesheet">
-  <!-- Google Font: Source Sans Pro -->
-  <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
-  
-</head>
+<title>글 수정</title>
+
 <body class="hold-transition sidebar-mini">
   <!-- Content Wrapper. Contains page content -->
   <div style="width:100%;">
@@ -81,10 +67,10 @@
 										
 										<c:forEach items="${board.attachList }" var="attach">
 											<li class="attach-item">																			
-												<div class="mailbox-attachment-info float-left ">
-													<a class="mailbox-attachment-name row" name="attachedFile" attach-fileName="${attach.fileName }" attach-no="${attach.ano }"
-														 href="/board/attach/getFile.do?bno=${attach.bno }&ano=${attach.ano }"  >													
-														<span><i class="fas fa-paperclip"></i>${attach.fileName }&nbsp;&nbsp;</span>
+												<div class="mailbox-attachment-info">
+													<a class="mailbox-attachment-name" name="attachedFile" attach-fileName="${attach.fileName }" attach-no="${attach.ano }"
+														 href="<%=request.getContextPath() %>/board/attach/getFile.do?bno=${attach.bno }&ano=${attach.ano }" >
+														<i class="fas fa-paperclip"></i>${attach.fileName }&nbsp;&nbsp;
 														<button type="button" style="border:0;outline:0;" class="badge badge-danger">X</button>
 													</a>																			
 												</div>
@@ -119,103 +105,86 @@
   </div>
   <!-- /.content-wrapper -->
 
-<!-- jQuery -->
-<script src="<%=request.getContextPath() %>/resources/bootstrap/plugins/jquery/jquery.min.js"></script>
-<!-- Bootstrap 4 -->
-<script src="<%=request.getContextPath() %>/resources/bootstrap/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-<!-- AdminLTE App -->
-<script src="<%=request.getContextPath() %>/resources/bootstrap/dist/js/adminlte.min.js"></script>
-<!-- summernote Editor -->
-<script src="<%=request.getContextPath() %>/resources/bootstrap/plugins/summernote/summernote.min.js"></script>
-<!-- jquery cookie -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
-<!-- handlebars -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.6/handlebars.min.js" ></script>
-<!-- common -->
-<script src="<%=request.getContextPath() %>/resources/js/common.js" ></script>
-
 <script type="text/javascript">
-// board 본문 가져오기
-$('#content').html('${board.content}');
-
-summernote_start($("#content"));
-
-$('#modifyBtn').on('click',function(e){
-// 	alert("modify btn click");
-
-	if($("input[name='title']").val()==""){
-		alert(input.name+"은 필수입니다.");
-		$("input[name='title']").focus();
-		return;
-	}
+window.onload=function(){
 	
-	var files = $('input[name="uploadFile"]');
-	for(var file of files){
-		console.log(file.name + " : " + file.value);
-		if(file.value==""){
-			alert("파일을 선택하세요.");
-			file.focus();
-			file.click();
+	$('#content').html('${board.content}');
+	
+	summernote_start($("#content"));
+	
+	$('#modifyBtn').on('click',function(e){
+	// 	alert("modify btn click");
+	
+		if($("input[name='title']").val()==""){
+			alert(input.name+"은 필수입니다.");
+			$("input[name='title']").focus();
+			return;
+		}
+		
+		var files = $('input[name="uploadFile"]');
+		for(var file of files){
+			console.log(file.name + " : " + file.value);
+			if(file.value==""){
+				alert("파일을 선택하세요.");
+				file.focus();
+				file.click();
+				return false;
+			}
+		}
+		
+		var form = $('form[name="modifyForm"]');
+		form.submit();
+	});
+	
+	$('div.attachList').on('click','a[name="attachedFile"] > button', function(event){
+	// 	alert("x btn click");
+		var parent = $(this).parent('a[name="attachedFile"]');
+		alert(parent.attr("attach-fileName")+"파일을 삭제합니다.");
+		
+		var ano = parent.attr("attach-no");
+		
+		$(this).parents('li.attach-item').remove();
+		
+		var input=$('<input>').attr({
+			"type":"hidden",
+			"name":"deleteFile",
+			"value":ano
+		});
+		$('form[role="form"]').prepend(input);
+		
+		return false;
+	});
+	
+	$('#addFileBtn').on('click',function(data){
+	// 	alert("add file btn click");
+		var attachedFile=$('a[name="attachedFile"]').length;	// 기존 첨부파일
+		var inputFile=$('input[name="uploadFile"]').length;		// 추가된 첨부파일
+		var attachCount = attachedFile+inputFile;
+		
+		if(attachCount >= 5){
+			alert("파일추가는 5개까지만 가능합니다.");
+			return;
+		}
+		
+		var input = $('<input>').attr({"type":"file","name":"uploadFile"}).css("display","inline");
+		
+		var div=$('<div>').addClass("inputRow");
+		div.append(input).append("<button style='border:0;outline:0;' class='badge bg-red' type='button'>X</button>");
+		div.appendTo('.fileInput');
+	});
+	
+	$('div.fileInput').on('click','div.inputRow > button',function(event){
+		$(this).parent('div.inputRow').remove();
+	});
+	$('.fileInput').on('change','input[type="file"]',function(event){
+		if(this.files[0].size > 1024*1024*40){
+			alert("파일 용량이 40MB를 초과하였습니다.");
+			this.value="";
+			$(this).focus();
 			return false;
 		}
-	}
-	
-	var form = document.modifyForm;
-	form.submit();
-});
-
-</script>
-
-<script type="text/javascript">
-$('div.attachList').on('click','a[name="attachedFile"] > button', function(event){
-// 	alert("x btn click");
-	var parent = $(this).parent('a[name="attachedFile"]');
-	alert(parent.attr("attach-fileName")+"파일을 삭제합니다.");
-	
-	var ano = parent.attr("attach-no");
-	
-	$(this).parents('li.attach-item').remove();
-	
-	var input=$('<input>').attr({
-		"type":"hidden",
-		"name":"deleteFile",
-		"value":ano
 	});
-	$('form[role="form"]').prepend(input);
-	
-	return false;
-});
-
-$('#addFileBtn').on('click',function(data){
-// 	alert("add file btn click");
-	var attachedFile=$('a[name="attachedFile"]').length;	// 기존 첨부파일
-	var inputFile=$('input[name="uploadFile"]').length;		// 추가된 첨부파일
-	var attachCount = attachedFile+inputFile;
-	
-	if(attachCount >= 5){
-		alert("파일추가는 5개까지만 가능합니다.");
-		return;
-	}
-	
-	var input = $('<input>').attr({"type":"file","name":"uploadFile"}).css("display","inline");
-	
-	var div=$('<div>').addClass("inputRow");
-	div.append(input).append("<button style='border:0;outline:0;' class='badge bg-red' type='button'>X</button>");
-	div.appendTo('.fileInput');
-});
-
-$('div.fileInput').on('click','div.inputRow > button',function(event){
-	$(this).parent('div.inputRow').remove();
-});
-$('.fileInput').on('change','input[type="file"]',function(event){
-	if(this.files[0].size > 1024*1024*40){
-		alert("파일 용량이 40MB를 초과하였습니다.");
-		this.value="";
-		$(this).focus();
-		return false;
-	}
-});
+}
 </script>
 
 </body>
-</html>
