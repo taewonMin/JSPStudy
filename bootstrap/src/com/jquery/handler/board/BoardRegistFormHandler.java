@@ -9,7 +9,7 @@ public class BoardRegistFormHandler implements CommandHandler {
 
 	@Override
 	public String process(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		String url = "board/registForm";
+		String url = "board/regist";
 		
 		return url;
 	}

@@ -2,23 +2,9 @@
     pageEncoding="UTF-8"%>
 <%@ page trimDirectiveWhitespaces="true" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  
-  <title>Board | Regist</title>
 
-  <!-- Font Awesome Icons -->
-  <link rel="stylesheet" href="<%=request.getContextPath() %>/resources/bootstrap/plugins/fontawesome-free/css/all.min.css">
-  <!-- Theme style -->
-  <link rel="stylesheet" href="<%=request.getContextPath() %>/resources/bootstrap/dist/css/adminlte.min.css">
-  <!-- include summernote css/js -->
-  <link rel="stylesheet" href="<%=request.getContextPath() %>/resources/bootstrap/plugins/summernote/summernote.min.css" rel="stylesheet">
-  <!-- Google Font: Source Sans Pro -->
-  <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
-  
-</head>
+<title>게시글 등록</title>
+
 <body class="hold-transition sidebar-mini">
   <!-- Content Wrapper. Contains page content -->
   <div style="width:100%;">
@@ -93,22 +79,9 @@
   </div>
   <!-- /.content-wrapper -->
 
-<!-- jQuery -->
-<script src="<%=request.getContextPath() %>/resources/bootstrap/plugins/jquery/jquery.min.js"></script>
-<!-- Bootstrap 4 -->
-<script src="<%=request.getContextPath() %>/resources/bootstrap/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-<!-- AdminLTE App -->
-<script src="<%=request.getContextPath() %>/resources/bootstrap/dist/js/adminlte.min.js"></script>
-<!-- Summernote -->
-<script src="<%=request.getContextPath() %>/resources/bootstrap/plugins/summernote/summernote-bs4.min.js"></script>
-<!-- handlebars -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.6/handlebars.min.js" ></script>
-<!-- common -->
-<script src="<%=request.getContextPath() %>/resources/js/common.js?v=1" ></script>
+
 
 <script>
-
-summernote_start('#content');
 
 function submit_go(){
 	
@@ -158,14 +131,18 @@ function deleteFile_go(number){
 	$('div.inputRow button.btn'+number).parent('div.inputRow').remove();
 }
 
-$('.fileInput').on('change','input[type="file"]',function(event){
-	if(this.files[0].size>1024*1024*40){
-		alert("파일 용량이 40MB를 초과하였습니다.");
-		this.value="";
-		$(this).focus();
-		return false;
-	}
-});
+window.onload=function(){
+	summernote_start('#content');
+	
+	$('.fileInput').on('change','input[type="file"]',function(event){
+		if(this.files[0].size>1024*1024*40){
+			alert("파일 용량이 40MB를 초과하였습니다.");
+			this.value="";
+			$(this).focus();
+			return false;
+		}
+	});
+}
 
 </script>
 

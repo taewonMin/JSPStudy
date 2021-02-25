@@ -1,6 +1,8 @@
 package com.jquery.handler.board;
 
 import java.io.PrintWriter;
+import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -8,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.jquery.dto.AttachVO;
 import com.jquery.dto.BoardVO;
+import com.jquery.exception.NotMultipartFormDataException;
 import com.jquery.handler.CommandHandler;
 import com.jquery.service.BoardService;
 import com.jquery.utils.FileUploadResolver;
@@ -28,12 +31,11 @@ public class BoardRegistHandler implements CommandHandler {
 	
 	@Override
 	public String process(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		String url = null;
-		
-		response.setContentType("text/html;charset=utf-8");
-		PrintWriter out = response.getWriter();
+		String url = "board/regist_success";
 		
 		MultipartHttpServletRequestParser multi = null;
+		List<AttachVO> attachList = null;
+		
 		try {
 			
 			multi = new MultipartHttpServletRequestParser(request, MEMORY_THRESHOLD, MAX_FILE_SIZE, MAX_REQUEST_SIZE);
@@ -42,36 +44,33 @@ public class BoardRegistHandler implements CommandHandler {
 			String uploadPath = GetUploadPath.getUploadPath("attach.upload");
 			
 			// 파일 저장
-			List<AttachVO> attachList = FileUploadResolver.fileUpload(multi.getFileItems("uploadFile"), uploadPath);
+			attachList = FileUploadResolver.fileUpload(multi.getFileItems("uploadFile"), uploadPath);
 			
-			// 게시글 저장
-			String writer = multi.getParameter("writer");
-			String title = multi.getParameter("title");
-			String content = multi.getParameter("content");
-			
-			BoardVO board = new BoardVO();
-			board.setAttachList(attachList);
-			board.setWriter(writer);
-			board.setContent(content);
-			board.setTitle(title);
-				
-			boardService.regist(board);
-			
-			// 결과
-			out.println("<script>");
-			out.println("window.opener.location.href='"+request.getContextPath()+"/board/list.do';");
-			out.println("window.close();");
-			out.println("</script>");
+		} catch(NotMultipartFormDataException e) {
+			e.printStackTrace();
+			url="board/regist_fail";
 		} catch(Exception e) {
 			e.printStackTrace();
-			out.println("<script>");
-			out.println("alert('글등록이 실패했습니다.');");
-			out.println("window.close();");
-			out.println("</script>");
+			url="board/regist_fail";
+		}
+		
+		// 게시글 저장
+		BoardVO board = new BoardVO();
+		board.setRegDate(new Date());
+		board.setAttachList(attachList);
+		board.setTitle(multi.getParameter("title"));
+		board.setContent(multi.getParameter("content"));
+		board.setWriter(multi.getParameter("writer"));
+		
+		try {
+			boardService.regist(board);
+			
+		}catch(SQLException e) {
+			e.printStackTrace();
+			url="board/regist_fail";
 		}
 		
 		return url;
 		
 	}
-
 }

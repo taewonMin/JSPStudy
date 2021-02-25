@@ -8,16 +8,12 @@
 <c:set var="pageMaker" value="${dataMap.pageMaker }" />
 <c:set var="cri" value="${pageMaker.cri }" />
 
-<%@ include file="/WEB-INF/views/include/header.jsp" %>
-
 <style type="text/css">
 	table th,td{
 		text-align: center;
 	}
 </style>
 <body class="hold-transition sidebar-mini">
-
-
 
   <!-- Content Wrapper. Contains page content -->
   <div style="width:100%;">
@@ -41,7 +37,7 @@
 
     <!-- Main content -->
     <div class="content">
-     		<div class="card">
+   		<div class="card">
 			<div class="card-header with-border">
 				<button type="button" class="btn btn-primary" id="registBtn" onclick="OpenWindow('registForm.do','글등록',800,700);">글등록</button>				
 				<div id="keyword" class="card-tools" style="width:550px;">
@@ -121,5 +117,3 @@
   <!-- /.content-wrapper -->
 
 </body>
-
-<%@ include file="/WEB-INF/views/include/footer.jsp" %>
