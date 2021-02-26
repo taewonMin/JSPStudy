@@ -64,14 +64,14 @@ public class FrontServlet extends HttpServlet {
 				} catch (Exception e) {
 					e.printStackTrace();
 					ExceptionLoggerHelper.write(request, e, handler);
-					view = "error/500";
+					view = "error/500_by_resolver";
 				}
 				
 			}else { // 잘못된 요청
-				view = "error/404";
+				view = "error/404_by_resolver";
 			}
 		}else {
-			view = "error/500";
+			view = "error/500_by_resolver";
 		}
 		
 		try {
@@ -79,7 +79,7 @@ public class FrontServlet extends HttpServlet {
 				ViewResolver.view(request, response, view);
 		}catch(Exception e) {
 			ExceptionLoggerHelper.write(request, e, handler);
-			view = "error/500";
+			view = "error/500_by_resolver";
 			ViewResolver.view(request, response, view);
 		}
 	}
