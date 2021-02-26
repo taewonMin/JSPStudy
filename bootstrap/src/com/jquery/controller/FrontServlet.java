@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.jquery.handler.CommandHandler;
+import com.jquery.utils.ExceptionLoggerHelper;
 
 public class FrontServlet extends HttpServlet {
 	
@@ -60,36 +61,26 @@ public class FrontServlet extends HttpServlet {
 				try {
 					view = handler.process(request, response);
 					
-					if(view != null) {
-						ViewResolver.view(request, response, view);
-					}
-					
 				} catch (Exception e) {
 					e.printStackTrace();
-					response.setContentType("text/html;charset=utf-8");
-					PrintWriter out = response.getWriter();
-					out.println("<script>");
-					out.println("alert('서비스 장애가 발생했습니다.\n잠시 후에 이용바랍니다.');");
-					out.println("history.go(-1);");
-					out.println("</script>");
+					ExceptionLoggerHelper.write(request, e, handler);
+					view = "error/500";
 				}
 				
 			}else { // 잘못된 요청
-				System.out.println("!! not found : " + command);
-				response.setContentType("text/html;charset=utf-8");
-				PrintWriter out = response.getWriter();
-				out.println("<script>");
-				out.println("alert('잘못된 요청입니다. 똑바로하세요.');");
-				out.println("history.go(-1);");
-				out.println("</script>");
+				view = "error/404";
 			}
 		}else {
-			response.setContentType("text/html;charset=utf-8");
-			PrintWriter out = response.getWriter();
-			out.println("<script>");
-			out.println("alert('서비스 장애가 발생했습니다.\n잠시 후에 이용바랍니다.');");
-			out.println("history.go(-1);");
-			out.println("</script>");
+			view = "error/500";
+		}
+		
+		try {
+			if(view != null)
+				ViewResolver.view(request, response, view);
+		}catch(Exception e) {
+			ExceptionLoggerHelper.write(request, e, handler);
+			view = "error/500";
+			ViewResolver.view(request, response, view);
 		}
 	}
 }

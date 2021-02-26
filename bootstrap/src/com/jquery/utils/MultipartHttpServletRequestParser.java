@@ -35,13 +35,17 @@ public class MultipartHttpServletRequestParser {
 		ServletFileUpload upload = ServletFileUploadBuilder.build(request, memory_threshold, max_file_size, max_request_size);
 		
 		List<FileItem> formItems = upload.parseRequest(request);
-		
+
+		String delStr = "";
 		for(FileItem item: formItems) {
 			// 1.1 필드
 			String paramName = item.getFieldName();
 			
 			if(item.isFormField()) {
 				String[] paramValues = item.getString("utf-8").split(",");
+				if(this.paramString.get(paramName) != null){
+					delStr += this.paramString.get(paramName);
+				}
 				this.paramString.put(paramName, paramValues);
 				
 			}else {	// 1.2 파일
